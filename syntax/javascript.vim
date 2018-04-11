@@ -582,7 +582,7 @@ let b:javascript_es6 = 1
   syn match jsAnonFuncArgComma /,/ contained
   hi! link jsAnonFuncArgComma jsAnonFunc
 
-  syn match jsFuncFatArrow /\%(\<[$A-Za-z_][$A-Za-z_0-9]*\|([$A-Za-z_][$A-Za-z_0-9]*\_s*\%(,\_s*[$A-Za-z_][$A-Za-z_0-9]*\)*)\|()\)\_s*=>/ contains=jsAnonFuncArgComma extend
+  syn match jsFuncFatArrow /\%(\<[$A-Za-z_][$A-Za-z_0-9]*\|(\%([$A-Za-z_][$A-Za-z_0-9]*\|\[\w\+\_s*\%(,\_s*\w\+\_s*\)*\]\)\_s*\%(,\_s*[$A-Za-z_][$A-Za-z_0-9]*\)*)\|()\)\_s*=>/ contains=jsAnonFuncArgComma extend
         \ nextgroup=jsAnonFuncBody skipwhite skipnl
   syn cluster jsClExpr add=jsFuncFatArrow
   hi! link jsFuncFatArrow Include
