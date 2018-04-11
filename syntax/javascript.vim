@@ -518,7 +518,7 @@ let b:javascript_es6 = 1
 
 " {{{ classes
 
-  syn match jsClassIntro /\<class\_s*\w\+\>/ nextgroup=jsClassBody,jsClassExtends skipwhite skipnl
+  syn match jsClassIntro /\<class\_s\+\w\+\>/ nextgroup=jsClassBody,jsClassExtends skipwhite skipnl
         \ contains=jsClass,jsUserIdentifier
   syn keyword jsClass contained class extends
   hi! link jsClass Typedef
