@@ -472,8 +472,8 @@ let b:javascript_es6 = 1
   hi! link jsImport Macro
   hi! link jsImportString Comment
 
-  syn keyword jsExport export
-  hi! link jsExport jsImport
+  syn region jsExportRegion matchgroup=jsImport start=/\<export\_s\+\%(default\_s\+\)\=/ end=/;/
+      \ contains=jsImportMembers keepend extend
 
   syn region jsImportRegion matchgroup=jsImport start=/\<import\>/ end=/;/
       \ contains=jsImportMembers,jsImportString,jsUserIdentifier,jsImportStar,jsImportFromAs,jsImportComma
