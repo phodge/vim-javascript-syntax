@@ -10,6 +10,7 @@ syn spell default
 " TODO: review all features and make sure stuff is wrapped in checks for the ES version
 let b:javascript_es5 = 1
 let b:javascript_es6 = 1
+let b:javascript_es2017 = 1
 
 
 " {{{ clusters
@@ -136,7 +137,7 @@ let b:javascript_es6 = 1
       \ case
       \ catch
       \ with
-      \ switch	yield
+      \ switch yield
       \ debugger
       \ default
   syn match jsReservedWord /\<\%(try\|finally\)\>/
@@ -172,7 +173,7 @@ let b:javascript_es6 = 1
           \ contains=@jsClExpr,jsErrorCloseBrace,jsErrorCloseParen,jsErrorSemicolon,jsErrorComma
           \ nextgroup=@jsClExpr skipwhite skipnl
   endif
-  
+ 
   syn match jsDictInlineFunc /\<\h\w*\ze\_s*(/ contained nextgroup=jsFullFuncArgs skipwhite skipnl
   hi! link jsDictInlineFunc jsDictKey
 
@@ -280,7 +281,7 @@ let b:javascript_es6 = 1
   syn match jsDictAssign contained /{\_s*\w\+\_s*\%(,\_s*\w\+\_s*\)*}/ extend
         \ nextgroup=jsAssign skipwhite skipnl contains=jsIdentifier
   hi! link jsDictAssign jsVar
-  
+
   " NOTE: jsListAssign is a top-level thing
   syn region jsListAssignRegion matchgroup=jsVar start=/\[/ end=/\]/ keepend extend
         \ nextgroup=jsAssign skipwhite skipnl
@@ -304,7 +305,7 @@ let b:javascript_es6 = 1
   syn region jsSuperStringExpr matchgroup=jsSuperStringDelim start=/\${/ end=/}/ keepend extend
         \ contains=@jsClExpr,jsErrorCloseSquare,jsErrorCloseParen,jsErrorSemicolon
   hi! link jsSuperStringDelim Special
-  
+
   syn match jsIdentifier /\<[$A-Za-z_][$A-Za-z0-9_]*\>/ nextgroup=@jsClAfterValue,jsAssign skipwhite skipnl contains=jsUserIdentifier
   syn cluster jsClExpr add=jsIdentifier
 
@@ -374,7 +375,7 @@ let b:javascript_es6 = 1
         \ keepend extend contains=@jsClExpr,jsVarComma,jsDictAssign,jsListAssignRegion
   syn match jsVarComma /,/ contained
   hi! link jsVarComma jsVar
-  
+
   syn region jsReturnStatement matchgroup=jsStatement start=/\<\%(return\|throw\)\>/ end=/;/ end=/\ze}/
         \ keepend extend contains=@jsClExpr,jsErrorCloseParen,jsErrorCloseSquare
   hi! link jsStatement Statement
@@ -483,7 +484,7 @@ let b:javascript_es6 = 1
 
   syn match jsImportStar contained /\*/
   hi! link jsImportStar jsImportString
-  
+
   syn region jsImportString contained start=/"/ end=/"/ keepend extend
 
   syn region jsImportMembers contained matchgroup=jsImport start=/{/ end=/}/ keepend extend
@@ -497,12 +498,12 @@ let b:javascript_es6 = 1
 
   " import ImportClause 'from' <string>
   " import <string>
-  
+
   " ImportClause:
   "     <identifier>
   "     [ <identifier> , ] '*' 'as' <identifier>
   "     [ <identifier> , ] NamedImports
-  " NamedImports: 
+  " NamedImports:
   "     '{\s*}'
   "     '{' ImportsList '}'
   "     '{' ImportsList ',' '}'
@@ -529,7 +530,7 @@ let b:javascript_es6 = 1
 
   syn region jsClassBody matchgroup=jsClass start=/{/ end=/}/ contained
         \ contains=jsClassMethod,jsMethodGenerator,jsClassStatic,jsClassProperty,jsComment,jsGetter
-  
+
   if b:javascript_es6
     syn match jsMethodGenerator contained /\*\ze\_s*[$A-Za-z_]/
     hi! link jsMethodGenerator Statement
@@ -586,8 +587,24 @@ let b:javascript_es6 = 1
         \ nextgroup=jsAnonFuncBody skipwhite skipnl
   syn cluster jsClExpr add=jsFuncFatArrow
   hi! link jsFuncFatArrow Include
-  
+
   "syn match jsAnonFunc
+
+" }}}
+
+" async/await {{{
+
+  if b:javascript_es2017
+    " async functions
+    syn keyword jsAsync async nextgroup=jsFuncFatArrow skipwhite skipnl
+    syn cluster jsClExpr add=jsAsync
+    hi! link jsAsync Statement
+
+    " await expressions
+    syn keyword jsAwait await nextgroup=@jsClExpr skipwhite skipnl contained
+    syn cluster jsClExpr add=jsAwait
+    hi! link jsAwait jsAsync
+  endif
 
 " }}}
 
