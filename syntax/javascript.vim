@@ -306,7 +306,7 @@ let b:javascript_es2017 = 1
         \ contains=@jsClExpr,jsErrorCloseSquare,jsErrorCloseParen,jsErrorSemicolon
   hi! link jsSuperStringDelim Special
 
-  syn match jsIdentifier /\<[$A-Za-z_][$A-Za-z0-9_]*\>/ nextgroup=@jsClAfterValue,jsAssign skipwhite skipnl contains=jsUserIdentifier
+  syn match jsIdentifier /\%(\<[A-Za-z_]\|\$\)[$A-Za-z0-9_]*\%(\$\|\>\)/ nextgroup=@jsClAfterValue,jsAssign skipwhite skipnl contains=jsUserIdentifier
   syn cluster jsClExpr add=jsIdentifier
 
   " special identifiers
