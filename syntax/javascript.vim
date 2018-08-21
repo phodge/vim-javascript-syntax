@@ -293,8 +293,8 @@ let b:javascript_es2017 = 1
 
 " {{{ expressions
 
-  syn region jsString start=/"/ end=/"/ skip=/\\./ keepend extend nextgroup=@jsClAfterValue skipwhite skipnl
-  syn region jsString start=/'/ end=/'/ skip=/\\./ keepend extend nextgroup=@jsClAfterValue skipwhite skipnl
+  syn region jsString start=/"/ end=/"/ skip=/\\./ keepend extend contains=@jsClInsideString nextgroup=@jsClAfterValue skipwhite skipnl
+  syn region jsString start=/'/ end=/'/ skip=/\\./ keepend extend contains=@jsClInsideString nextgroup=@jsClAfterValue skipwhite skipnl
   syn cluster jsClExpr add=jsString
   hi! link jsString String
 
@@ -604,6 +604,18 @@ let b:javascript_es2017 = 1
     syn keyword jsAwait await nextgroup=@jsClExpr skipwhite skipnl contained
     syn cluster jsClExpr add=jsAwait
     hi! link jsAwait jsAsync
+  endif
+
+" }}}
+
+" {{{
+
+  " if we're embedded in a PHP script, also match PHP regions in some places
+  if get(g:, 'main_syntax', '') == 'php'
+    " NOTE: normally you'd syntax-include the syntax you're nesting, but that
+    " would cause infinite recursion here
+    syn cluster jsClExpr add=phpRegion
+    syn cluster jsClInsideString add=phpRegion
   endif
 
 " }}}
