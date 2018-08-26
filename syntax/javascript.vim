@@ -578,8 +578,8 @@ let b:javascript_es2017 = 1
   hi! link jsFullFunc Macro
   hi! link jsAnonFunc Include
 
-  syn keyword jsFullFunc function nextgroup=jsFullFuncName skipwhite skipnl
-  syn keyword jsAnonFunc function contained nextgroup=jsAnonFuncArgs,jsAnonFuncName skipwhite skipnl
+  syn match jsFullFunc /\<function\ze\_s\+[$A-Za-z0-9_]/ nextgroup=jsFullFuncName skipwhite skipnl
+  syn match jsAnonFunc /\<function\ze\_s*(/ contained nextgroup=jsAnonFuncArgs,jsAnonFuncName skipwhite skipnl
   syn cluster jsClExpr add=jsAnonFunc
 
   syn match jsFullFuncName contained /\<[$A-Za-z_][$A-Za-z0-9_]*\>/ contains=jsUserIdentifier
@@ -623,7 +623,7 @@ let b:javascript_es2017 = 1
 
   if b:javascript_es2017
     " async functions
-    syn keyword jsAsync async nextgroup=jsFuncFatArrow skipwhite skipnl
+    syn keyword jsAsync async nextgroup=jsFuncFatArrow,jsFullFunc,jsAnonFunc skipwhite skipnl
     syn cluster jsClExpr add=jsAsync
     hi! link jsAsync Statement
 
