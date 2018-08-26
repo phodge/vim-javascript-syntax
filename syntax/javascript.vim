@@ -43,6 +43,7 @@ let b:javascript_es2017 = 1
   syn match jsErrorCloseBrace  contained /}/
   syn match jsErrorCloseSquare /]/
   syn match jsErrorCloseParen  /)/
+  syn cluster jsClTop add=jsErrorCloseSquare,jsErrorCloseParen
   hi! link jsErrorCloseBrace  jsSyntaxError
   hi! link jsErrorCloseSquare jsSyntaxError
   hi! link jsErrorCloseParen  jsSyntaxError
@@ -54,6 +55,7 @@ let b:javascript_es2017 = 1
   " keywords that are used out of place
   syn keyword jsKeywordError in instanceof
   syn match jsKeywordError /\<\%(import\|export\)\>/
+  syn cluster jsClTop add=jsKeywordError
   hi! link jsKeywordError jsSyntaxError
 
 " }}}
@@ -141,6 +143,7 @@ let b:javascript_es2017 = 1
       \ debugger
       \ default
   syn match jsReservedWord /\<\%(try\|finally\)\>/
+  syn cluster jsClTop add=jsReservedWord
   hi! link jsReservedWord IncSearch
 
 " }}}
@@ -149,6 +152,7 @@ let b:javascript_es2017 = 1
 
   syn region jsComment start=!//! end=/$/ oneline keepend extend
   syn region jsComment start=!/\*! end=!\*/! keepend extend
+  syn cluster jsClTop add=jsComment
   hi! link jsComment Comment
 
 " }}}
@@ -158,6 +162,7 @@ let b:javascript_es2017 = 1
   syn region jsDictRegion matchgroup=jsDict start=/{/ end=/}/
         \ keepend extend contains=jsDictKey,jsDictKeySpecial,jsDictInlineFunc,jsDictComma,jsComment,jsErrorSemicolon,jsComment,jsGetter
   syn cluster jsClExpr add=jsDictRegion
+  syn cluster jsClTop add=jsDictRegion
   hi! link jsDict Number
 
   syn match jsDictKey /\<[$A-Za-z0-9_]\+\_s*:/ contained nextgroup=@jsClExpr skipwhite skipnl
@@ -208,7 +213,7 @@ let b:javascript_es2017 = 1
   hi! link jsSetterArgParens jsGetter
 
   syn region jsGetterBody contained matchgroup=jsGetter start=/{/ end=/}/ keepend extend
-        \ contains=TOP,@jsClImportExport
+        \ contains=@jsClTop,@jsClImportExport
 
 
 " }}}
@@ -221,6 +226,7 @@ let b:javascript_es2017 = 1
         \ contains=@jsClExpr,jsListComma,jsComment,jsErrorSemicolon
         \ nextgroup=@jsClAfterValue skipwhite skipnl
   syn cluster jsClExpr add=jsListRegion
+  syn cluster jsClTop add=jsClTop
   syn match jsListComma /,/ contained
   hi! link jsListComma jsList
 
@@ -232,6 +238,7 @@ let b:javascript_es2017 = 1
   syn keyword jsLiteralValue undefined null true false
         \ nextgroup=@jsClAfterValue skipwhite skipnl
   syn cluster jsClExpr add=jsLiteralValue
+  syn cluster jsClTop add=jsClTop
   hi! link jsLiteralValue Typedef
 
   " decimal
@@ -243,6 +250,7 @@ let b:javascript_es2017 = 1
     syn match jsNumberBinary /\<0b[01]\+\>/ nextgroup=@jsClAfterValue skipwhite skipnl
   endif
   syn cluster jsClExpr add=jsNumber,jsNumberOctal,jsNumberBinary
+  syn cluster jsClTop add=jsNumber,jsNumberOctal,jsNumberBinary
   hi! link jsNumber Statement
   hi! link jsNumberOctal Typedef
   hi! link jsNumberBinary SpecialChar
@@ -256,6 +264,7 @@ let b:javascript_es2017 = 1
   syn match jsOperator /[!~]/ nextgroup=@jsClExpr skipwhite skipnl
   syn match jsOperator /\%(++\=\|--\=\)/ nextgroup=@jsClExpr skipwhite skipnl
   syn cluster jsClExpr add=jsOperator
+  syn cluster jsClTop add=jsOperator
   hi! link jsOperator SpecialChar
 
   syn match jsPostIncrement contained /\%(++\|--\)/ nextgroup=@jsClExpr skipwhite skipnl
@@ -287,6 +296,7 @@ let b:javascript_es2017 = 1
         \ nextgroup=jsAssign skipwhite skipnl
         \ contains=jsVarComma,jsSplat,jsIdentifier
   syn match jsSplat contained /\.\.\./
+  syn cluster jsClTop add=jsListAssignRegion
   hi! link jsSplat jsVar
 
 " }}}
@@ -296,23 +306,27 @@ let b:javascript_es2017 = 1
   syn region jsString start=/"/ end=/"/ skip=/\\./ keepend extend contains=@jsClInsideString nextgroup=@jsClAfterValue skipwhite skipnl
   syn region jsString start=/'/ end=/'/ skip=/\\./ keepend extend contains=@jsClInsideString nextgroup=@jsClAfterValue skipwhite skipnl
   syn cluster jsClExpr add=jsString
+  syn cluster jsClTop add=jsString
   hi! link jsString String
 
   " new `` interpolated strings
   syn region jsSuperString start=/`/ end=/`/ skip=/\\./ contains=jsSuperStringExpr keepend extend
   hi! link jsSuperString jsString
   syn cluster jsClExpr add=jsSuperString
+  syn cluster jsClTop add=jsSuperString
   syn region jsSuperStringExpr matchgroup=jsSuperStringDelim start=/\${/ end=/}/ keepend extend
         \ contains=@jsClExpr,jsErrorCloseSquare,jsErrorCloseParen,jsErrorSemicolon
   hi! link jsSuperStringDelim Special
 
   syn match jsIdentifier /\%(\<[A-Za-z_]\|\$\)[$A-Za-z0-9_]*\%(\$\|\>\)/ nextgroup=@jsClAfterValue,jsAssign skipwhite skipnl contains=jsUserIdentifier
   syn cluster jsClExpr add=jsIdentifier
+  syn cluster jsClTop add=jsIdentifier
 
   " special identifiers
   syn keyword jsSpecialIdentifier super this nextgroup=@jsClAfterValue,jsAssign skipwhite skipnl
   hi! link jsSpecialIdentifier SpecialChar
   syn cluster jsClExpr add=jsSpecialIdentifier
+  syn cluster jsClTop add=jsSpecialIdentifier
 
   syn region jsCall contained matchgroup=jsParens start=/(/ end=/)/ keepend extend
         \ contains=@jsClExpr,jsErrorCloseBrace,jsErrorCloseSquare,jsErrorSemicolon
@@ -329,6 +343,7 @@ let b:javascript_es2017 = 1
         \ nextgroup=@jsClAfterValue skipwhite skipnl
         \ matchgroup=Error end=/[;]/
   syn cluster jsClExpr add=jsParenExpr
+  syn cluster jsClTop add=jsParenExpr
 
 " }}}
 
@@ -384,20 +399,23 @@ let b:javascript_es2017 = 1
         \ keepend extend
   hi! link jsBreakStatement Keyword
 
+  syn cluster jsClTop add=jsVarDecl,jsReturnStatement,jsBreakStatement
+
 " }}}
 
 " {{{ for loops and conditionals
 
   syn match jsOrphanFlowControl /\<\%(if\|for\|while\|do\)\>/
+  syn cluster jsClTop add=jsOrphanFlowControl
   hi! link jsOrphanFlowControl jsSyntaxError
 
   " simple braces for 'else' and 'for' blocks
-  syn region jsFlowBraces matchgroup=jsConditional start=/{/ end=/}/ keepend extend contained contains=TOP,@jsClImportExport
+  syn region jsFlowBraces matchgroup=jsConditional start=/{/ end=/}/ keepend extend contained contains=@jsClTop,@jsClImportExport
   " braces for 'if' clauses that will allow an 'else' afterward
-  syn region jsConditionalBraces matchgroup=jsConditional start=/{/ end=/}/ keepend extend contained contains=TOP,@jsClImportExport
+  syn region jsConditionalBraces matchgroup=jsConditional start=/{/ end=/}/ keepend extend contained contains=@jsClTop,@jsClImportExport
         \ nextgroup=jsConditionalElse skipwhite skipnl
   " braces for a 'do' clause that will allow a 'while' afterward
-  syn region jsDoWhileBraces matchgroup=jsConditional start=/{/ end=/}/ keepend extend contained contains=TOP,@jsClImportExport
+  syn region jsDoWhileBraces matchgroup=jsConditional start=/{/ end=/}/ keepend extend contained contains=@jsClTop,@jsClImportExport
         \ nextgroup=jsDoWhile skipwhite skipnl
 
   " if ()
@@ -440,6 +458,7 @@ let b:javascript_es2017 = 1
   syn region jsFlowPost matchgroup=jsConditional start=/\<while\_s*(/ end=/);/ keepend extend contained
   hi! link jsFlowPost jsConditional
 
+  syn cluster jsClTop add=jsConditionalRegion,jsFlowRegion,jsDo
 
 " }}}
 
@@ -448,7 +467,7 @@ let b:javascript_es2017 = 1
   hi! link jsTry Statement
 
   syn region jsTryBlock matchgroup=jsTry start=/\<try\_s*{/ end=/}/ keepend extend
-        \ contains=TOP,@jsClImportExport
+        \ contains=@jsClTop,@jsClImportExport
         \ nextgroup=jsCatchStatement,jsFinallyStatement skipwhite skipnl
 
   syn region jsCatchStatement contained matchgroup=jsTry start=/\<catch\_s*(/ end=/)/ keepend extend
@@ -459,10 +478,12 @@ let b:javascript_es2017 = 1
   hi! link jsFinallyStatement jsTry
 
   syn region jsCatchBlock contained matchgroup=jsTry start=/{/ end=/}/ keepend extend
-        \ contains=TOP,@jsClImportExport
+        \ contains=@jsClTop,@jsClImportExport
         \ nextgroup=jsFinallyStatement skipwhite skipnl
   syn region jsFinallyBlock contained matchgroup=jsTry start=/{/ end=/}/ keepend extend
-        \ contains=TOP,@jsClImportExport
+        \ contains=@jsClTop,@jsClImportExport
+
+  syn cluster jsClTop add=jsTryBlock
 
 " }}}
 
@@ -514,6 +535,8 @@ let b:javascript_es2017 = 1
   " ImportSpecifier:
   "     <identifier>
   "     <identifier> 'as' <identifier>
+  
+  syn cluster jsClTop add=jsClImportExport
 
 " }}}
 
@@ -545,6 +568,8 @@ let b:javascript_es2017 = 1
         \ contains=jsAssign
   hi! link jsClassStatic jsClass
 
+  syn cluster jsClTop add=jsClassIntro
+
 
 " }}}
 
@@ -574,9 +599,9 @@ let b:javascript_es2017 = 1
 
   " both types of function braces
   syn region jsFullFuncBody matchgroup=jsFullFuncBrace start=/{/ end=/}/ keepend extend contained
-        \ contains=TOP,@jsClImportExport
+        \ contains=@jsClTop,@jsClImportExport
   hi! link jsFullFuncBrace jsFullFunc
-  syn region jsAnonFuncBody matchgroup=jsAnonFuncBrace start=/{/ end=/}/ keepend extend contained contains=TOP,@jsClImportExport
+  syn region jsAnonFuncBody matchgroup=jsAnonFuncBrace start=/{/ end=/}/ keepend extend contained contains=@jsClTop,@jsClImportExport
   syn region jsAnonFuncBody matchgroup=jsAnonFuncBrace start=/(/ end=/)/ keepend extend contained contains=@jsClExpr,jsErrorCloseBrace,jsErrorCloseSquare,jsErrorSemicolon
   hi! link jsAnonFuncBrace jsAnonFunc
 
@@ -589,6 +614,8 @@ let b:javascript_es2017 = 1
   hi! link jsFuncFatArrow Include
 
   "syn match jsAnonFunc
+  
+  syn cluster jsClTop add=jsFullFunc,jsAnonFunc,jsFuncFatArrow
 
 " }}}
 
@@ -604,6 +631,8 @@ let b:javascript_es2017 = 1
     syn keyword jsAwait await nextgroup=@jsClExpr skipwhite skipnl contained
     syn cluster jsClExpr add=jsAwait
     hi! link jsAwait jsAsync
+
+    syn cluster jsClTop add=jsAwait,jsAsync
   endif
 
 " }}}
