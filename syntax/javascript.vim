@@ -514,7 +514,7 @@ endfor
   syn match jsImportStar contained /\*/
   hi! link jsImportStar jsImportString
 
-  syn region jsImportString contained start=/"/ end=/"/ keepend extend
+  syn region jsImportString contained start=/\z(["']\)/ end=/\z1/ keepend extend
 
   syn region jsImportMembers contained matchgroup=jsImport start=/{/ end=/}/ keepend extend
         \ contains=jsImportIdentifier,jsUserIdentifier,jsImportComma,jsImportFromAs
