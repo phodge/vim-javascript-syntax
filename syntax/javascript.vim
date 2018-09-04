@@ -497,13 +497,11 @@ endfor
 
 " {{{ imports/exports
 
-  syn cluster jsClImportExport add=jsImportRegion,jsExport
+  syn cluster jsClImportExport add=jsImportRegion,jsExportRegion
 
   hi! link jsImport Macro
   hi! link jsImportString Comment
 
-  syn region jsExportRegion matchgroup=jsImport start=/\<export\_s\+\%(default\_s\+\)\=/ end=/;/
-      \ contains=jsImportMembers keepend extend
 
   syn region jsImportRegion matchgroup=jsImport start=/\<import\>/ end=/;/
       \ contains=jsImportMembers,jsImportString,jsUserIdentifier,jsImportStar,jsImportFromAs,jsImportComma
@@ -523,10 +521,42 @@ endfor
 
   syn match jsImportIdentifier contained /[$A-Za-z_][$A-Za-z_0-9]*/
   hi! link jsImportIdentifier jsImportString
+  
+  " EXPORTS
+  
+  hi! link jsExport SpecialChar
+  hi! link jsExportDefault Statement
+  hi! link jsExportStar Statement
 
+  syn keyword jsExportStart export skipwhite skipnl
+        \ nextgroup=jsExportDefault,jsExportStar,jsExportList,jsExportLetRegion,jsFullFunc
+  hi! link jsExportStart jsExport
+  "syn region jsExportRegion matchgroup=jsImport start=/\<export\>/ end=/;/ keepend extend
+        "\ contains=jsExportList
+  
+  " export { name1, name2, …, nameN };
+  " export { variable1 as name1, variable2 as name2, …, nameN };
+  syn region jsExportList matchgroup=jsExportParens start=/{/ end=/};/ end=/}\ze\_s*from\>/
+        \ contained keepend extend
+        \ contains=jsImportIdentifier,jsUserIdentifier,jsImportComma,jsExportAs,jsExportAsDefault
+        \ nextgroup=jsExportFromRegion skipwhite skipnl
+  hi! link jsExportParens jsExport
+  syn keyword jsExportAs contained as nextgroup=jsExportAsDefault skipwhite skipnl
+  hi! link jsExportAs jsExport
+  syn keyword jsExportAsDefault contained default
+  hi! link jsExportAsDefault jsExportDefault
 
-  " import ImportClause 'from' <string>
-  " import <string>
+  syn region jsExportLetRegion contained matchgroup=jsVar start=/\<\%(var\|let\|const\)\>/ matchgroup=jsExport end=/;/
+        \ keepend extend contains=@jsClExpr,jsVarComma
+  
+  syn keyword jsExportDefault contained default
+        \ nextgroup=jsFullFunc,jsClassIntro skipwhite skipnl
+
+  syn match jsExportStar /\*/ contained nextgroup=jsExportFromRegion skipwhite skipnl
+
+  syn region jsExportFromRegion contained matchgroup=jsExportFrom start=/\<from\>/ end=/;/
+        \ contains=jsImportString
+  hi! link jsExportFrom jsExport
 
   " ImportClause:
   "     <identifier>
