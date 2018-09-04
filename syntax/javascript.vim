@@ -394,9 +394,7 @@ endfor
 
   hi! link jsVar Macro
 
-  syn region jsVarDecl matchgroup=jsVar start=/\<\%(let\|const\)\>/ end=/;/
-        \ keepend extend contains=@jsClExpr,jsVarComma,jsDictAssign,jsListAssignRegion
-  syn region jsVarDecl matchgroup=jsVar start=/\<\%(var\)\>/ end=/;/
+  syn region jsVarDecl matchgroup=jsVar start=/\<\%(var\|let\|const\)\>/ end=/;/
         \ keepend extend contains=@jsClExpr,jsVarComma,jsDictAssign,jsListAssignRegion
   syn match jsVarComma /,/ contained
   hi! link jsVarComma jsVar
