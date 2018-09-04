@@ -8,9 +8,19 @@ syn spell default
 " TODO: builtins
 
 " TODO: review all features and make sure stuff is wrapped in checks for the ES version
-let b:javascript_es5 = 1
-let b:javascript_es6 = 1
-let b:javascript_es2017 = 1
+let s:bufname = bufname('')
+let s:defaults = {
+      \ 'javascript_es5':        1,
+      \ 'javascript_es6':        1,
+      \ 'javascript_es2017':     1,
+      \ 'javascript_jsx':        (s:bufname =~ '\.[tj]sx\>'),
+      \ 'javascript_typescript': (s:bufname =~ '\.tsx\?$'),
+      \ }
+for [s:name, s:default] in items(s:defaults)
+  if !exists('b:'.s:name)
+    let b:[s:name] = s:default
+  endif
+endfor
 
 
 " {{{ clusters
