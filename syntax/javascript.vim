@@ -122,7 +122,7 @@ endfor
 
         " grab everything after the word 'interface'
         let l:name = matchstr(getline(l:line), '\c^\s*\%(interface\|type\)\s\+\zs[$a-z0-9_]\+')
-        
+
         " add the name to our word list
         if strlen(l:name)
           let l:wordlist[l:name] = 1
@@ -170,7 +170,7 @@ endfor
 " {{{ reserved words
 
   " TODO: finish implementing all of these
-  syn keyword jsReservedWord 
+  syn keyword jsReservedWord
       \ catch
       \ with
       \ yield
@@ -211,7 +211,7 @@ endfor
           \ contains=@jsClExpr,jsErrorCloseBrace,jsErrorCloseParen,jsErrorSemicolon,jsErrorComma
           \ nextgroup=@jsClExpr skipwhite skipnl
   endif
- 
+
   syn match jsDictInlineFunc /\<\h\w*\ze\_s*(/ contained nextgroup=jsFullFuncArgs skipwhite skipnl
   hi! link jsDictInlineFunc jsDictKey
 
@@ -491,7 +491,7 @@ endfor
   hi! link jsFlowPost jsConditional
 
   " switch() (case / default)
-  
+
   syn region jsSwitchIntroRegion matchgroup=jsConditional start=/\<switch\s_*(/ end=/)/
         \ keepend extend contains=@jsClExpr,jsErrorCloseBrace,jsErrorCloseSquare
         \ nextgroup=jsSwitchBodyRegion skipwhite skipnl
@@ -502,7 +502,7 @@ endfor
   syn match jsDefaultStatement contained /\<default:/
 
   hi! link jsDefaultStatement Statement
-  
+
 
   syn cluster jsClTop add=jsConditionalRegion,jsFlowRegion,jsDo,jsSwitchIntroRegion
 
@@ -559,9 +559,9 @@ endfor
 
   syn match jsImportIdentifier contained /[$A-Za-z_][$A-Za-z_0-9]*/
   hi! link jsImportIdentifier jsImportString
-  
+
   " EXPORTS
-  
+
   hi! link jsExport SpecialChar
   hi! link jsExportDefault Statement
   hi! link jsExportStar Statement
@@ -571,7 +571,7 @@ endfor
   hi! link jsExportStart jsExport
   "syn region jsExportRegion matchgroup=jsImport start=/\<export\>/ end=/;/ keepend extend
         "\ contains=jsExportList
-  
+
   " export { name1, name2, …, nameN };
   " export { variable1 as name1, variable2 as name2, …, nameN };
   syn region jsExportList matchgroup=jsExportParens start=/{/ end=/};/ end=/}\ze\_s*from\>/
@@ -586,7 +586,7 @@ endfor
 
   syn region jsExportLetRegion contained matchgroup=jsVar start=/\<\%(var\|let\|const\)\>/ matchgroup=jsExport end=/;/
         \ keepend extend contains=@jsClExpr,jsVarComma
-  
+
   syn keyword jsExportDefault contained default
         \ nextgroup=jsFullFunc,jsClassIntro skipwhite skipnl
 
@@ -611,7 +611,7 @@ endfor
   " ImportSpecifier:
   "     <identifier>
   "     <identifier> 'as' <identifier>
-  
+
   syn cluster jsClTop add=jsClImportExport
 
 " }}}
@@ -692,7 +692,7 @@ endfor
   hi! link jsFuncFatArrow Include
 
   "syn match jsAnonFunc
-  
+
   syn cluster jsClTop add=jsFullFunc,jsAnonFunc,jsFuncFatArrow
 
 " }}}
@@ -728,7 +728,7 @@ endfor
 " }}}
 
 if b:javascript_typescript " TypeScript: {{{
-  
+
   syn match tsFuncType /:/ contained nextgroup=jsTypeComplex_Func skipwhite skipnl
 
   syn region tsTypeComplex start=/[$A-Za-z0-9_]\+\%(\.[$A-Za-z0-9_]\+\)*</ end=/>/
@@ -741,7 +741,7 @@ if b:javascript_typescript " TypeScript: {{{
   hi! link tsTypeParamComma Typedef
 
   " simple types {{{
-  
+
     syn keyword tsSimpleType contained string number boolean null undefined
     syn keyword tsSimpleTypeSpecial contained any never void
     syn keyword tsSimpleTypeBad contained Number String Boolean
@@ -752,7 +752,7 @@ if b:javascript_typescript " TypeScript: {{{
     hi! link tsSimpleTypeString Comment
 
     syn cluster tsClSimpleTypes add=tsSimpleType,tsSimpleTypeSpecial,tsSimpleTypeBad,tsSimpleTypeOther,tsSimpleTypeString
-    
+
   " }}}
 
 
