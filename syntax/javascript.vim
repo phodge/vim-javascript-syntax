@@ -146,13 +146,11 @@ endfor
 
   " TODO: finish implementing all of these
   syn keyword jsReservedWord 
-      \ case
       \ catch
       \ with
-      \ switch yield
+      \ yield
       \ debugger
-      \ default
-  syn match jsReservedWord /\<\%(try\|finally\)\>/
+  syn match jsReservedWord /\<\%(try\|finally\|case\|default\)\>/
   syn cluster jsClTop add=jsReservedWord
   hi! link jsReservedWord IncSearch
 
@@ -466,7 +464,21 @@ endfor
   syn region jsFlowPost matchgroup=jsConditional start=/\<while\_s*(/ end=/);/ keepend extend contained
   hi! link jsFlowPost jsConditional
 
-  syn cluster jsClTop add=jsConditionalRegion,jsFlowRegion,jsDo
+  " switch() (case / default)
+  
+  syn region jsSwitchIntroRegion matchgroup=jsConditional start=/\<switch\s_*(/ end=/)/
+        \ keepend extend contains=@jsClExpr,jsErrorCloseBrace,jsErrorCloseSquare
+        \ nextgroup=jsSwitchBodyRegion skipwhite skipnl
+  syn region jsSwitchBodyRegion contained matchgroup=jsConditional start=/{/ end=/}/ keepend extend
+        \ contains=@jsClTop,jsCaseStatement,jsDefaultStatement
+  syn region jsCaseStatement contained matchgroup=jsDefaultStatement start=/\<case\>/ end=/:/
+        \ contains=@jsClExpr,jsErrorCloseBrace,jsErrorCloseSquare,jsErrorComma,jsErrorAssign,jsErrorCloseParen
+  syn match jsDefaultStatement contained /\<default:/
+
+  hi! link jsDefaultStatement Statement
+  
+
+  syn cluster jsClTop add=jsConditionalRegion,jsFlowRegion,jsDo,jsSwitchIntroRegion
 
 " }}}
 
