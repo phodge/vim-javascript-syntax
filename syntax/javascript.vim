@@ -107,6 +107,27 @@ endfor
           let l:imports = <SID>RegisterFirstWord(l:imports, l:wordlist)
         endwhile
       endwhile
+
+      " search again for typescript type definitions
+      let l:start = 0
+      while l:start <= line('$')
+        call cursor(l:start, 1)
+        let [l:line, l:col] = searchpos('^\s*\%(interface\|type\) ', 'cnW', 0, 10)
+        if l:line == 0
+          break
+        endif
+
+        " set cursor to next line so we don't search endlessly
+        let l:start = l:line + 1
+
+        " grab everything after the word 'interface'
+        let l:name = matchstr(getline(l:line), '\c^\s*\%(interface\|type\)\s\+\zs[$a-z0-9_]\+')
+        
+        " add the name to our word list
+        if strlen(l:name)
+          let l:wordlist[l:name] = 1
+        endif
+      endwhile
     finally
       call setpos('.', l:oldpos)
     endtry
