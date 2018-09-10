@@ -687,7 +687,7 @@ endfor
 
 " }}}
 
-" {{{
+" nesting/embedding {{{
 
   " if we're embedded in a PHP script, also match PHP regions in some places
   if get(g:, 'main_syntax', '') == 'php'
