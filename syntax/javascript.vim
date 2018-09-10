@@ -367,7 +367,7 @@ endfor
   syn match jsCommaOperator /,/
   hi! link jsCommaOperator Operator
 
-  syn match jsLogicalOperator /\%(&&\|||\|[*&^|]=\@!\|++\@!\|--\@!\|\/[*/]\@!\)/ contained
+  syn match jsLogicalOperator /\%(&&\|||\|[*&^|]=\@!\|+[+=]\@!\|-[-=]\@!\|\/[*/]\@!\)/ contained
         \ nextgroup=@jsClExpr skipwhite skipnl
   syn match jsComparisonOperator /\%([!=]==\=\|[<>]=\=\)/ contained
         \ nextgroup=@jsClExpr skipwhite skipnl
