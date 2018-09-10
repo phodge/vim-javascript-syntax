@@ -339,7 +339,7 @@ endfor
   syn cluster jsClTop add=jsSpecialIdentifier
 
   syn region jsCall contained matchgroup=jsParens start=/(/ end=/)/ keepend extend
-        \ contains=@jsClExpr,jsErrorCloseBrace,jsErrorCloseSquare,jsErrorSemicolon
+        \ contains=@jsClExpr,jsErrorCloseBrace,jsErrorCloseSquare,jsErrorSemicolon,jsComment
         \ nextgroup=@jsClAfterValue skipwhite skipnl
   syn region jsPropAccess contained matchgroup=jsParens start=/\[/ end=/\]/ keepend extend
         \ contains=@jsClExpr,jsErrorCloseBrace,jsErrorCloseParen,jsErrorSemicolon
