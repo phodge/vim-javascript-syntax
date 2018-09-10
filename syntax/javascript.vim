@@ -729,17 +729,6 @@ endfor
 
 if b:javascript_typescript " TypeScript: {{{
 
-  syn match tsFuncType /:/ contained nextgroup=jsTypeComplex_Func skipwhite skipnl
-
-  syn region tsTypeComplex start=/[$A-Za-z0-9_]\+\%(\.[$A-Za-z0-9_]\+\)*</ end=/>/
-        \ contained keepend extend
-        \ contains=tsTypeComplex,tsTypeParamComma
-        \ " TODO: nextgroup= what comes next?
-  hi! link tsTypeComplex tsTypeParamComma
-
-  syn match tsTypeParamComma /,/ contained
-  hi! link tsTypeParamComma Typedef
-
   " simple types {{{
 
     syn keyword tsSimpleType contained string number boolean null undefined
