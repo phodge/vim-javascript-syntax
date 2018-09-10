@@ -29,7 +29,10 @@ endfor
   " jsClAfterValue
   " jsClImportExport - import / export statements - these aren't allowed at
   "                    the top level
+  " tsClSimpleTypes - simple TS types
+  " tsClTypeHere - reference to a type, or a simple type
   " jsClInsideClass - things that go inside a class body
+  syn cluster tsClTypeHere add=@tsClSimpleTypes
 
 " }}}
 
@@ -395,7 +398,7 @@ endfor
   hi! link jsVar Macro
 
   syn region jsVarDecl matchgroup=jsVar start=/\<\%(var\|let\|const\)\>/ end=/;/
-        \ keepend extend contains=@jsClExpr,jsVarComma,jsDictAssign,jsListAssignRegion
+        \ keepend extend contains=@jsClExpr,jsVarComma,jsDictAssign,jsListAssignRegion,tsTypeFollowedByValue
   syn match jsVarComma /,/ contained
   hi! link jsVarComma jsVar
 
@@ -715,6 +718,33 @@ if b:javascript_typescript " TypeScript: {{{
 
   syn match tsTypeParamComma /,/ contained
   hi! link tsTypeParamComma Typedef
+
+  " simple types {{{
+  
+    syn keyword tsSimpleType contained string number boolean null undefined
+    syn keyword tsSimpleTypeSpecial contained any never void
+    syn keyword tsSimpleTypeBad contained Number String Boolean
+    syn region tsSimpleTypeString contained start=/\z(['"]\)/ end=/\z1/ skip=/\\./
+    hi! link tsSimpleType Function
+    hi! link tsSimpleTypeSpecial Identifier
+    hi! link tsSimpleTypeBad IncSearch
+    hi! link tsSimpleTypeString Comment
+
+    syn cluster tsClSimpleTypes add=tsSimpleType,tsSimpleTypeSpecial,tsSimpleTypeBad,tsSimpleTypeOther,tsSimpleTypeString
+    
+  " }}}
+
+
+  " ": <type>" syntax {{{
+
+    syn region tsTypeFollowedByValue matchgroup=tsTypeColon start=/:/ matchgroup=jsAssign end=/=/
+          \ keepend extend
+          \ nextgroup=@jsClExpr skipwhite skipnl
+          \ contains=@tsClTypeHere
+
+    hi! link tsTypeColon Function
+
+  " }}}
 
 endif " }}}
 
