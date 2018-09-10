@@ -29,6 +29,7 @@ endfor
   " jsClAfterValue
   " jsClImportExport - import / export statements - these aren't allowed at
   "                    the top level
+  " jsClInsideClass - things that go inside a class body
 
 " }}}
 
@@ -198,6 +199,7 @@ endfor
   syn cluster jsClGetterError add=jsGetterArgsError
   syn match jsGetter /\<get\>\%(\_s*:\)\@!/ contained nextgroup=jsGetterName,@jsClGetterError skipwhite skipnl
   syn match jsGetter /\<set\>\%(\_s*:\)\@!/ contained nextgroup=jsSetterName,@jsClGetterError skipwhite skipnl
+  syn cluster jsClInsideClass add=jsGetter
   hi! link jsGetter Keyword
 
   syn match jsGetterName contained /\<[$A-Za-z_][$A-Za-z0-9_]*\>/ nextgroup=jsGetterArgs,@jsClGetterError skipwhite skipnl
@@ -602,7 +604,7 @@ endfor
         \ nextgroup=jsClassBody skipwhite skipnl contains=jsUserIdentifier,jsDot,jsClass
 
   syn region jsClassBody matchgroup=jsClass start=/{/ end=/}/ contained
-        \ contains=jsClassMethod,jsMethodGenerator,jsClassStatic,jsClassProperty,jsComment,jsGetter
+        \ contains=jsClassMethod,jsMethodGenerator,jsClassStatic,jsComment,@jsClInsideClass
 
   if b:javascript_es6
     syn match jsMethodGenerator contained /\*\ze\_s*[$A-Za-z_]/
@@ -617,6 +619,8 @@ endfor
   syn region jsClassProperty contained start=/\<[$A-Za-z_][$A-Za-z0-9_]*\ze\_s*=/ keepend extend matchgroup=jsClass end=/;/
         \ contains=jsAssign
   hi! link jsClassStatic jsClass
+
+  syn cluster jsClInsideClass add=jsClassProperty
 
   syn cluster jsClTop add=jsClassIntro
 
