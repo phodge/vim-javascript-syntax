@@ -942,6 +942,19 @@ if b:javascript_typescript " {{{
             \ contains=@tsClTypeHere nextgroup=tsIfaceMemberTypeRegion
 
     " }}}
+    
+    " "declare global" {{{
+    
+      hi! link tsDeclare SpecialChar
+    
+      syn keyword tsDeclare declare nextgroup=tsDeclareGlobalRegion skipwhite
+      syn region tsDeclareGlobalRegion matchgroup=tsDeclare start=/\<global\_s*{/ end=/}/ keepend extend
+            \ matchgroup=Error end="[\])]"
+            \ contains=@jsClTop
+
+      syn cluster jsClTop add=tsDeclare
+
+    " }}}
 
   " }}}
 
