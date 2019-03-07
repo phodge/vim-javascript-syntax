@@ -785,6 +785,19 @@ if b:javascript_typescript " {{{
 
   " }}}
 
+  " simple type declarations using "type" statement {{{
+
+    syn region tsTypeDecl matchgroup=tsInterface start=/^\s*\<type\>/ end=/\ze=/ keepend extend
+          \ contains=tsTypeNameHere
+          \ nextgroup=tsTypeDeclTypeRegion
+    syn region tsTypeDeclTypeRegion contained matchgroup=tsInterface start=/=/ end=/;/ keepend extend
+          \ matchgroup=jsSyntaxError end=/[:,]/
+          \ contains=@tsClTypeHere
+
+    syn cluster jsClTop add=tsTypeDecl
+
+  " }}}
+
   " typescript interfaces - things which are members of things and have which are properties of things {{{
 
     syn match tsTypeNameHere contained /\c[$a-z_][$a-z0-9_]*/
