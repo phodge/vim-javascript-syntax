@@ -952,7 +952,6 @@ if b:javascript_typescript " {{{
     hi! link tsClassMemberModifier jsClass
     syn cluster jsClInsideClass add=tsClassMemberModifier
 
-
   " }}}
 
 endif " }}}
