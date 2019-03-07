@@ -492,7 +492,7 @@ endfor
 
   " switch() (case / default)
 
-  syn region jsSwitchIntroRegion matchgroup=jsConditional start=/\<switch\s_*(/ end=/)/
+  syn region jsSwitchIntroRegion matchgroup=jsConditional start=/\<switch\_s*(/ end=/)/
         \ keepend extend contains=@jsClExpr,jsErrorCloseBrace,jsErrorCloseSquare
         \ nextgroup=jsSwitchBodyRegion skipwhite skipnl
   syn region jsSwitchBodyRegion contained matchgroup=jsConditional start=/{/ end=/}/ keepend extend
