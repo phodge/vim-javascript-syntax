@@ -671,7 +671,7 @@ endfor
 
   syn keyword jsClassStatic contained static nextgroup=jsClassProperty skipwhite skipnl
   syn region jsClassProperty contained start=/\<[$A-Za-z_][$A-Za-z0-9_]*\ze\_s*[:=]/ keepend extend matchgroup=jsClass end=/;/
-        \ contains=jsAssign,tsMemberTypeRegion
+        \ contains=jsAssign,tsClassMemberTypeRegion
   hi! link jsClassStatic jsClass
 
   syn cluster jsClInsideClass add=jsClassProperty
@@ -900,19 +900,24 @@ if b:javascript_typescript " {{{
       hi! link tsMemberReadonly tsMemberModifier
 
       syn match tsMemberName contained /[$A-Za-z0-9_]\+?\=\ze:/
-            \ nextgroup=tsMemberTypeRegion contains=tsMemberOptional
+            \ nextgroup=tsIfaceMemberTypeRegion contains=tsMemberOptional
       hi! link tsMemberName jsUserIdentifier
 
       syn match tsMemberOptional contained /?/
       hi! link tsMemberOptional tsMemberModifier
 
-      syn region tsMemberTypeRegion contained matchgroup=tsInterface start=/?:/ start=/:/ end=/;/
+      syn region tsClassMemberTypeRegion contained matchgroup=tsInterface start=/?:/ start=/:/ end=/\ze[=;]/
+            \ matchgroup=jsSyntaxError end=/,/
+            \ keepend extend
+            \ contains=@tsClTypeHere
+
+      syn region tsIfaceMemberTypeRegion contained matchgroup=tsInterface start=/?:/ start=/:/ end=/;/
             \ matchgroup=jsSyntaxError end=/,/
             \ keepend extend
             \ contains=@tsClTypeHere
 
       syn region tsMemberWildcardRegion contained matchgroup=tsMemberModifier start=/\[\s*\w\+:/ end=/\]\ze:/
-            \ contains=@tsClTypeHere nextgroup=tsMemberTypeRegion
+            \ contains=@tsClTypeHere nextgroup=tsIfaceMemberTypeRegion
 
     " }}}
 
