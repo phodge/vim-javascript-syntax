@@ -29,6 +29,7 @@ endfor
   " jsClAfterValue
   " jsClImportExport - import / export statements - these aren't allowed at
   "                    the top level
+  " jsClExtendable - things that can be extended - this is slightly different when typescript enabled
   " tsClSimpleTypes - simple TS types
   " tsClTypeHere - reference to a type, or a simple type
   " jsClInsideClass - things that go inside a class body
@@ -744,6 +745,42 @@ if b:javascript_typescript " {{{
 
   " }}}
 
+  " typescript interfaces - things which are members of things and have which are properties of things {{{
+
+    syn match tsTypeNameHere contained /\c[$a-z_][$a-z0-9_]*/
+          \ contains=jsUserIdentifier
+          \ nextgroup=tsTypeNameDot,tsTypeArgsRegion,tsTypeNameExtends skipwhite
+    syn match tsTypeNameDot contained /\./
+          \ nextgroup=tsTypeNameProperty skipwhite
+    syn match tsTypeNameProperty contained /\c[$a-z_][$a-z0-9_]*/
+          \ nextgroup=tsTypeNameDot,tsTypeArgsRegion skipwhite
+    syn keyword tsTypeNameExtends contained extends implements
+    hi! link tsTypeNameExtends tsInterface
+
+    hi! link tsTypeNameDot jsDot
+
+    syn cluster jsClExtendable add=tsTypeNameHere
+    syn cluster tsClTypeHere add=tsTypeNameHere
+
+    syn region tsTypeArgsRegion contained matchgroup=tsTypeArgsDelim start=/</ end=/>/ keepend extend
+          \ contains=tsTypeArgsComma,@tsClTypeHere
+    syn match tsTypeArgsComma contained /,/
+
+    syn region tsInterfaceArgsRegion contained matchgroup=tsTypeArgsDelim start=/</ end=/>/ keepend extend
+          \ contains=tsTypeArgsComma,@tsClTypeHere
+          \ nextgroup=tsInterfaceBody skipwhite skipnl
+
+    hi! link tsTypeArgsDelim tsInterface
+    hi! link tsTypeArgsComma tsTypeArgsDelim
+
+    syn keyword tsTypeComplex contained Array ReadonlyArray
+    hi! link tsTypeComplex tsSimpleType
+
+    syn match tsTypeUnion contained /|/
+    hi! link tsTypeUnion Macro
+    syn cluster tsClTypeHere add=tsTypeUnion
+
+  " }}}
 
   " ": <type>" syntax {{{
 
