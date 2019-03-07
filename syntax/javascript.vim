@@ -772,7 +772,7 @@ if b:javascript_typescript " {{{
 
   " simple types {{{
 
-    syn keyword tsSimpleType contained string number boolean true false null undefined
+    syn keyword tsSimpleType contained string number boolean true false null undefined this
     syn keyword tsSimpleTypeSpecial contained any never void
     syn keyword tsSimpleTypeBad contained Number String Boolean
     syn region tsSimpleTypeString contained start=/\z(['"]\)/ end=/\z1/ skip=/\\./
@@ -896,7 +896,7 @@ if b:javascript_typescript " {{{
       syn region tsInterfaceBody contained matchgroup=tsInterface start=/{/ end=/}/
             \ contains=tsMemberReadonly,tsMemberName,jsComment,tsMemberWildcardRegion,tsCallSignatureRegion,tsFuncPrototypeRegionB
 
-      syn keyword tsMemberReadonly contained readonly
+      syn keyword tsMemberReadonly contained readonly new
       hi! link tsMemberReadonly tsMemberModifier
 
       syn match tsMemberName contained /[$A-Za-z0-9_]\+?\=\ze:/
