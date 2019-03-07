@@ -727,11 +727,11 @@ endfor
 
 " }}}
 
-if b:javascript_typescript " TypeScript: {{{
+if b:javascript_typescript " {{{
 
   " simple types {{{
 
-    syn keyword tsSimpleType contained string number boolean null undefined
+    syn keyword tsSimpleType contained string number boolean true false null undefined
     syn keyword tsSimpleTypeSpecial contained any never void
     syn keyword tsSimpleTypeBad contained Number String Boolean
     syn region tsSimpleTypeString contained start=/\z(['"]\)/ end=/\z1/ skip=/\\./
