@@ -812,6 +812,78 @@ if b:javascript_typescript " {{{
 
   " }}}
 
+  " function prototypes {{{
+
+    hi! link tsFuncPrototype String
+
+    " there are two variants of this - (A) uses fat-arrow and can be used anywhere a type
+    " definition is expected. (B) uses ":" instead of fat-arrow and is used in interface
+    " declarations
+    syn region tsFuncPrototypeRegionA contained matchgroup=tsFuncPrototype start=/(/ end=/)/ keepend extend
+          \ contains=tsFuncPrototypeArgType
+          \ nextgroup=tsFuncPrototypeFatArrow skipwhite skipnl
+    syn region tsFuncPrototypeRegionB contained matchgroup=tsFuncPrototype start=/(/ end=/)/ keepend extend
+          \ contains=tsFuncPrototypeArgType
+          \ nextgroup=tsFuncPrototypeColon skipwhite
+    syn match tsFuncPrototypeFatArrow contained /=>/ nextgroup=@tsClTypeHere skipwhite skipnl
+    syn region tsFuncPrototypeColon contained matchgroup=tsFuncPrototypeFatArrow start=/:/ end=/;/ contains=@tsClTypeHere
+    hi! link tsFuncPrototypeFatArrow tsFuncPrototype
+
+    syn region tsFuncPrototypeArgType contained matchgroup=tsFuncPrototype start=/:/ end=/,\|\ze)/ keepend extend
+          \ contains=@tsClTypeHere
+
+    syn cluster tsClTypeHere add=tsFuncPrototypeRegionA
+
+  " }}}
+
+  " type declarations {{{
+
+    " interfaces {{{
+
+      hi! link tsInterface Function
+      hi! link tsMemberModifier jsDict
+
+      syn cluster jsClTop add=tsInterface
+      syn keyword tsInterface interface nextgroup=tsInterfaceName skipwhite skipnl
+
+      syn match tsInterfaceName contained /[$A-Za-z0-9_]\+/ contains=jsUserIdentifier
+            \ nextgroup=tsInterfaceArgsRegion,tsInterfaceBody skipwhite skipnl
+
+      syn region tsInterfaceBody contained matchgroup=tsInterface start=/{/ end=/}/
+            \ contains=tsMemberReadonly,tsMemberName,jsComment,tsMemberWildcardRegion,tsCallSignatureRegion,tsFuncPrototypeRegionB
+
+      syn keyword tsMemberReadonly contained readonly
+      hi! link tsMemberReadonly tsMemberModifier
+
+      syn match tsMemberName contained /[$A-Za-z0-9_]\+?\=\ze:/
+            \ nextgroup=tsMemberTypeRegion contains=tsMemberOptional
+      hi! link tsMemberName jsUserIdentifier
+
+      syn match tsMemberOptional contained /?/
+      hi! link tsMemberOptional tsMemberModifier
+
+      syn region tsMemberTypeRegion contained matchgroup=tsInterface start=/?:/ start=/:/ end=/;/
+            \ matchgroup=jsSyntaxError end=/,/
+            \ keepend extend
+            \ contains=@tsClTypeHere
+
+      syn region tsMemberWildcardRegion contained matchgroup=tsMemberModifier start=/\[\s*propName:/ end=/\]\ze:/
+            \ contains=@tsClTypeHere nextgroup=tsMemberTypeRegion
+
+    " }}}
+
+  " }}}
+
+  " class members {{{
+
+    syn keyword tsClassMemberModifier contained abstract private public
+          \ nextgroup=jsClassProperty skipwhite skipnl
+    hi! link tsClassMemberModifier jsClass
+    syn cluster jsClInsideClass add=tsClassMemberModifier
+
+
+  " }}}
+
 endif " }}}
 
 if b:javascript_jsx " {{{
