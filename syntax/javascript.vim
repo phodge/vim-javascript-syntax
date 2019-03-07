@@ -697,9 +697,14 @@ endfor
 
   " full/anonymous function arg list
   syn region jsFullFuncArgs contained matchgroup=jsFullFunc start=/(/ end=/)/ contained
-        \ keepend extend contains=jsFullFuncArgComma
-        \ nextgroup=jsFullFuncBody skipwhite skipnl
-        \ matchgroup=Error end=/,\_s*)/
+        \ keepend extend contains=jsFullFuncCommaError,tsTypeFollowedByArg,jsFuncArgComma,@jsClExpr
+        \ nextgroup=jsFullFuncBody,tsTypeFollowedByFullFuncBody skipwhite skipnl
+  syn match jsFuncArgComma contained /,/
+  hi! link jsFuncArgComma jsFullFunc
+  if ! b:javascript_typescript
+    syn match jsFullFuncCommaError /,\ze\_s*)/
+    hi! link jsFullFuncCommaError Error
+  endif
   syn region jsAnonFuncArgs contained matchgroup=jsAnonFunc start=/(/ end=/)/ contained
         \ keepend extend contains=jsAnonFuncArgComma
         \ nextgroup=jsAnonFuncBody skipwhite skipnl
@@ -719,11 +724,17 @@ endfor
   syn match jsFuncFatArrow /\%(\<[$A-Za-z_][$A-Za-z_0-9]*\|(\%([$A-Za-z_][$A-Za-z_0-9]*\|\[\w\+\_s*\%(,\_s*\w\+\_s*\)*\]\)\_s*\%(,\_s*[$A-Za-z_][$A-Za-z_0-9]*\)*)\|()\)\_s*=>/ contains=jsAnonFuncArgComma extend
         \ nextgroup=jsAnonFuncBody skipwhite skipnl
   syn cluster jsClExpr add=jsFuncFatArrow
-  hi! link jsFuncFatArrow Include
+  hi! link jsFuncFatArrow jsAnonFunc
+
+  syn match jsFuncFatArrowLonely contained /=>/ nextgroup=jsAnonFuncBody,@jsClExpr skipwhite skipnl
+      \ keepend extend
+  hi! link jsFuncFatArrowLonely jsAnonFunc
+
+  syn cluster jsClAfterValue add=jsFuncFatArrowLonely
 
   "syn match jsAnonFunc
 
-  syn cluster jsClTop add=jsFullFunc,jsAnonFunc,jsFuncFatArrow
+  syn cluster jsClTop add=jsFullFunc,jsAnonFunc,jsFuncFatArrow,jsFuncFatArrowLonely
 
 " }}}
 
@@ -816,6 +827,16 @@ if b:javascript_typescript " {{{
     syn region tsTypeFollowedByValue matchgroup=tsTypeColon start=/:/ matchgroup=jsAssign end=/=/
           \ keepend extend
           \ nextgroup=@jsClExpr skipwhite skipnl
+          \ contains=@tsClTypeHere
+
+    syn region tsTypeFollowedByFullFuncBody matchgroup=tsTypeColon start=/:/ end=/\ze{/
+          \ keepend extend
+          \ nextgroup=jsFullFuncBody skipwhite skipnl
+          \ contains=@tsClTypeHere
+
+    syn region tsTypeFollowedByArg matchgroup=tsTypeColon start=/:/ keepend extend
+          \ matchgroup=jsFuncArgComma end=/,/ end=/\ze)/
+          \ matchgroup=jsAssign end=/=>\@!/
           \ contains=@tsClTypeHere
 
     hi! link tsTypeColon Function
@@ -1006,6 +1027,7 @@ if b:javascript_jsx " {{{
           \ contains=jsxTagOuter,@jsxClInlineExpr
 
     syn match jsxTagOuterName /<\@<=\h\w*\%(\.\w\+\)*/ contained contains=jsxPossibleIdentifier
+          \ nextgroup=tsTypeArgsRegion
     syn match jsxPossibleIdentifier contained /\<\h\w*\>/ nextgroup=jsxTagNameDot contains=jsxHtmlTagName,jsUserIdentifier
     syn match jsxTagNameDot contained /\./ nextgroup=jsxIdentifierProperty
     syn match jsxIdentifierProperty contained /\h\w*/ nextgroup=jsxTagNameDot
