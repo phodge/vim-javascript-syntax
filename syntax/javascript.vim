@@ -911,7 +911,7 @@ if b:javascript_typescript " {{{
             \ keepend extend
             \ contains=@tsClTypeHere
 
-      syn region tsMemberWildcardRegion contained matchgroup=tsMemberModifier start=/\[\s*propName:/ end=/\]\ze:/
+      syn region tsMemberWildcardRegion contained matchgroup=tsMemberModifier start=/\[\s*\w\+:/ end=/\]\ze:/
             \ contains=@tsClTypeHere nextgroup=tsMemberTypeRegion
 
     " }}}
