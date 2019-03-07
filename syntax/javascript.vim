@@ -638,14 +638,24 @@ endfor
 
 " {{{ classes
 
-  syn match jsClassIntro /\<class\_s\+\w\+\>/ nextgroup=jsClassBody,jsClassExtends skipwhite skipnl
+  syn match jsClassIntro /\<class\_s\+\w\+\>/ nextgroup=jsClassBody,jsClassExtendsRegion,tsClassImplementsRegion,tsTypeArgsRegion skipwhite skipnl
         \ contains=jsClass,jsUserIdentifier
-  syn keyword jsClass contained class extends
+  syn keyword jsClass contained class
   hi! link jsClass Typedef
   syn cluster jsClExpr add=jsClassIntro
 
-  syn match jsClassExtends /\<extends\_s\+\%([$A-Za-z0-9_.]\+\)/ contained
-        \ nextgroup=jsClassBody skipwhite skipnl contains=jsUserIdentifier,jsDot,jsClass
+  syn region jsClassExtendsRegion matchgroup=jsClass start=/\<extends\>/
+        \ end="\ze{" end="\ze\<implements\>"
+        \ contained keepend extend
+        \ nextgroup=jsClassBody,tsClassImplementsRegion skipwhite skipnl
+        \ contains=@jsClExtendable
+
+  if b:javascript_typescript
+    syn region tsClassImplementsRegion matchgroup=jsClass start=/\<implements\>/ end=/\ze{/
+          \ contained keepend extend
+          \ contains=@jsClExtendable
+          \ nextgroup=jsClassBody skipwhite skipnl
+  endif
 
   syn region jsClassBody matchgroup=jsClass start=/{/ end=/}/ contained
         \ contains=jsClassMethod,jsMethodGenerator,jsClassStatic,jsComment,@jsClInsideClass
@@ -660,8 +670,8 @@ endfor
   hi! link jsClassConstructor jsClass
 
   syn keyword jsClassStatic contained static nextgroup=jsClassProperty skipwhite skipnl
-  syn region jsClassProperty contained start=/\<[$A-Za-z_][$A-Za-z0-9_]*\ze\_s*=/ keepend extend matchgroup=jsClass end=/;/
-        \ contains=jsAssign
+  syn region jsClassProperty contained start=/\<[$A-Za-z_][$A-Za-z0-9_]*\ze\_s*[:=]/ keepend extend matchgroup=jsClass end=/;/
+        \ contains=jsAssign,tsMemberTypeRegion
   hi! link jsClassStatic jsClass
 
   syn cluster jsClInsideClass add=jsClassProperty
