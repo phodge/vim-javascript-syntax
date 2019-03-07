@@ -597,6 +597,25 @@ endfor
         \ contains=jsImportString
   hi! link jsExportFrom jsExport
 
+  " export let name1, name2, …, nameN; // also var, const
+  " export let name1 = …, name2 = …, …, nameN; // also var, const
+  " export function FunctionName(){...}
+  " export class ClassName {...}
+
+  " export default expression;
+  " export default function (…) { … } // also class, function*
+  " export default function name1(…) { … } // also class, function*
+  " export { name1 as default, … };
+
+  " export * from …;
+  " export { name1, name2, …, nameN } from …;
+  " export { import1 as name1, import2 as name2, …, nameN } from …;
+  " export { default } from …;
+
+
+  " import ImportClause 'from' <string>
+  " import <string>
+
   " ImportClause:
   "     <identifier>
   "     [ <identifier> , ] '*' 'as' <identifier>
