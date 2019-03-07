@@ -893,8 +893,11 @@ if b:javascript_typescript " {{{
       syn match tsInterfaceName contained /[$A-Za-z0-9_]\+/ contains=jsUserIdentifier
             \ nextgroup=tsInterfaceArgsRegion,tsInterfaceBody skipwhite skipnl
 
-      syn region tsInterfaceBody contained matchgroup=tsInterface start=/{/ end=/}/
+      syn region tsInterfaceBody contained matchgroup=tsInterface start=/{/ end=/}/ keepend extend
             \ contains=tsMemberReadonly,tsMemberName,jsComment,tsMemberWildcardRegion,tsCallSignatureRegion,tsFuncPrototypeRegionB
+
+      " you can also create an anonymous interface type using a '{ ... }' region anywhere a type is expected
+      syn cluster tsClTypeHere add=tsInterfaceBody
 
       syn keyword tsMemberReadonly contained readonly new
       hi! link tsMemberReadonly tsMemberModifier
@@ -911,7 +914,7 @@ if b:javascript_typescript " {{{
             \ keepend extend
             \ contains=@tsClTypeHere
 
-      syn region tsIfaceMemberTypeRegion contained matchgroup=tsInterface start=/?:/ start=/:/ end=/;/
+      syn region tsIfaceMemberTypeRegion contained matchgroup=tsInterface start=/?:/ start=/:/ end=/;/ end=/\ze}/
             \ matchgroup=jsSyntaxError end=/,/
             \ keepend extend
             \ contains=@tsClTypeHere
