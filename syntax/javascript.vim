@@ -861,7 +861,7 @@ if b:javascript_typescript " {{{
           \ nextgroup=@jsClExpr skipwhite skipnl
           \ contains=@tsClTypeHere
 
-    syn region tsTypeFollowedByFullFuncBody matchgroup=tsTypeColon start=/:/ end=/\ze{/
+    syn region tsTypeFollowedByFullFuncBody matchgroup=tsTypeColon start=/:/ end=/\ze{\%($\|\s\)/
           \ keepend extend
           \ nextgroup=jsFullFuncBody skipwhite skipnl
           \ contains=@tsClTypeHere
@@ -888,7 +888,7 @@ if b:javascript_typescript " {{{
     syn region tsFuncPrototypeRegionB contained matchgroup=tsFuncPrototype start=/(/ end=/)/ keepend extend
           \ contains=tsFuncPrototypeArgType
           \ nextgroup=tsFuncPrototypeColon skipwhite
-    syn match tsFuncPrototypeFatArrow contained /=>/ nextgroup=@tsClTypeHere skipwhite skipnl
+    syn match tsFuncPrototypeFatArrow contained /=>/ nextgroup=@tsClTypeHere skipwhite skipnl extend
     syn region tsFuncPrototypeColon contained matchgroup=tsFuncPrototypeFatArrow start=/:/ end=/;/ contains=@tsClTypeHere
     hi! link tsFuncPrototypeFatArrow tsFuncPrototype
 
