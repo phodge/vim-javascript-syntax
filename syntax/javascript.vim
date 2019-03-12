@@ -677,15 +677,15 @@ endfor
   endif
 
   syn region jsClassBody matchgroup=jsClass start=/{/ end=/}/ contained
-        \ contains=jsClassMethod,jsMethodGenerator,jsClassStatic,jsComment,@jsClInsideClass
+        \ contains=jsClassConstructor,jsClassMethod,jsMethodGenerator,jsClassStatic,jsComment,@jsClInsideClass
 
   if b:javascript_es6
     syn match jsMethodGenerator contained /\*\ze\_s*[$A-Za-z_]/
     hi! link jsMethodGenerator Statement
   endif
-  syn match jsClassMethod /[$A-Za-z_][$A-Za-z_0-9]*\ze\_s*(/ contained contains=jsClassConstructor
+  syn match jsClassMethod /[$A-Za-z_][$A-Za-z_0-9]*\ze\_s*(/ contained
         \ nextgroup=jsFullFuncArgs skipwhite skipnl
-  syn keyword jsClassConstructor contained constructor
+  syn keyword jsClassConstructor contained constructor nextgroup=tsConstructorArgsRegion skipwhite skipnl
   hi! link jsClassConstructor jsClass
 
   syn keyword jsClassStatic contained static nextgroup=jsClassProperty skipwhite skipnl
@@ -964,6 +964,18 @@ if b:javascript_typescript " {{{
           \ nextgroup=jsClassProperty skipwhite skipnl
     hi! link tsClassMemberModifier jsClass
     syn cluster jsClInsideClass add=tsClassMemberModifier
+
+  " }}}
+  
+  " private/public constructor args {{{
+
+    syn region tsConstructorArgsRegion contained matchgroup=jsClassConstructor start=/(/ end=/)/ keepend extend
+          \ matchgroup=Error end="[\]}]"
+          \ contains=jsFullFuncCommaError,tsTypeFollowedByArg,jsFuncArgComma,@jsClExpr,tsConstructorVisibility
+          \ nextgroup=jsFullFuncBody skipwhite skipnl
+
+    syn keyword tsConstructorVisibility contained private public
+    hi! link tsConstructorVisibility tsClassMemberModifier
 
   " }}}
 
