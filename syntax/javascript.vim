@@ -382,6 +382,25 @@ endfor
 
 " }}}
 
+" {{{ regex expressions
+
+  syn region jsRegexRegion matchgroup=jsRegexDelim start="/[/*]\@!" end="/" skip="\\." contained keepend extend
+        \ nextgroup=@jsClAfterValue skipwhite skipnl
+  syn cluster jsClExpr add=jsRegexRegion
+
+  syn match jsRegexEscape /\\./ contained containedin=jsRegexRegion
+  syn match jsRegexSequence /\\[wd]/ contained containedin=jsRegexRegion
+  syn match jsRegexQuantifier /[+*?]\|{\d\+\%(,\d\+\)\=}/ contained containedin=jsRegexRegion
+  syn match jsRegexSpecial /[.^$]/ contained containedin=jsRegexRegion
+
+  hi! link jsRegexDelim Statement
+  hi! link jsRegexQuantifier Typedef
+  hi! link jsRegexSpecial Typedef
+  hi! link jsRegexEscape Comment
+  hi! link jsRegexSequence Identifier
+
+" }}}
+
 " {{{ operators
 
   syn match jsDot /\./ contained nextgroup=jsPropertyName,jsMethodName skipwhite skipnl
