@@ -716,7 +716,7 @@ endfor
 
   " full/anonymous function arg list
   syn region jsFullFuncArgs contained matchgroup=jsFullFunc start=/(/ end=/)/ contained
-        \ keepend extend contains=jsFullFuncCommaError,tsTypeFollowedByArg,jsFuncArgComma,@jsClExpr
+        \ keepend extend contains=jsFullFuncCommaError,tsTypeFollowedByArg,jsFuncArgComma,@jsClExpr,jsComment
         \ nextgroup=jsFullFuncBody,tsTypeFollowedByFullFuncBody skipwhite skipnl
   syn match jsFuncArgComma contained /,/
   hi! link jsFuncArgComma jsFullFunc
@@ -883,7 +883,7 @@ if b:javascript_typescript " {{{
     " definition is expected. (B) uses ":" instead of fat-arrow and is used in interface
     " declarations
     syn region tsFuncPrototypeRegionA contained matchgroup=tsFuncPrototype start=/(/ end=/)/ keepend extend
-          \ contains=tsFuncPrototypeArgType
+          \ contains=tsFuncPrototypeArgType,jsComment
           \ nextgroup=tsFuncPrototypeFatArrow skipwhite skipnl
     syn region tsFuncPrototypeRegionB contained matchgroup=tsFuncPrototype start=/(/ end=/)/ keepend extend
           \ contains=tsFuncPrototypeArgType
