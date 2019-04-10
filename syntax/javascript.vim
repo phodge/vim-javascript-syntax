@@ -587,7 +587,7 @@ endfor
   hi! link jsExportStar Statement
 
   syn keyword jsExportStart export skipwhite skipnl
-        \ nextgroup=jsExportDefault,jsExportStar,jsExportList,jsExportLetRegion,jsFullFunc
+        \ nextgroup=jsExportDefault,jsExportStar,jsExportList,jsExportLetRegion,jsFullFunc,tsAbstractClass
   hi! link jsExportStart jsExport
   "syn region jsExportRegion matchgroup=jsImport start=/\<export\>/ end=/;/ keepend extend
         "\ contains=jsExportList
@@ -662,6 +662,10 @@ endfor
   syn keyword jsClass contained class
   hi! link jsClass Typedef
   syn cluster jsClExpr add=jsClassIntro
+
+  syn keyword tsAbstractClass contained abstract nextgroup=jsClassIntro skipwhite skipnl
+  hi! link tsAbstractClass jsClass
+  syn cluster jsClTop add=tsAbstractClass
 
   syn region jsClassExtendsRegion matchgroup=jsClass start=/\<extends\>/
         \ end="\ze{" end="\ze\<implements\>"
