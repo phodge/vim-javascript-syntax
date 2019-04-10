@@ -960,8 +960,8 @@ if b:javascript_typescript " {{{
 
   " class members {{{
 
-    syn keyword tsClassMemberModifier contained abstract private public
-          \ nextgroup=jsClassProperty skipwhite skipnl
+    syn keyword tsClassMemberModifier contained abstract private protected public
+          \ nextgroup=jsClassProperty,jsAsync skipwhite skipnl
     hi! link tsClassMemberModifier jsClass
     syn cluster jsClInsideClass add=tsClassMemberModifier
 
@@ -974,7 +974,7 @@ if b:javascript_typescript " {{{
           \ contains=jsFullFuncCommaError,tsTypeFollowedByArg,jsFuncArgComma,@jsClExpr,tsConstructorVisibility
           \ nextgroup=jsFullFuncBody skipwhite skipnl
 
-    syn keyword tsConstructorVisibility contained private public
+    syn keyword tsConstructorVisibility contained private protected public
     hi! link tsConstructorVisibility tsClassMemberModifier
 
   " }}}
