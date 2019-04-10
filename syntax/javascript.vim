@@ -840,6 +840,7 @@ if b:javascript_typescript " {{{
 
     syn region tsTypeArgsRegion contained matchgroup=tsTypeArgsDelim start=/</ end=/>/ keepend extend
           \ contains=tsTypeArgsComma,@tsClTypeHere
+          \ nextgroup=jsClassExtendsRegion skipwhite skipnl
     syn match tsTypeArgsComma contained /,/
 
     syn region tsInterfaceArgsRegion contained matchgroup=tsTypeArgsDelim start=/</ end=/>/ keepend extend
