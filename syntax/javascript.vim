@@ -810,7 +810,7 @@ if b:javascript_typescript " {{{
 
   " simple type declarations using "type" statement {{{
 
-    syn region tsTypeDecl matchgroup=tsInterface start=/^\s*\<type\>/ end=/\ze=/ keepend extend
+    syn region tsTypeDecl matchgroup=tsInterface start=/\<type\>/ end=/\ze=/ keepend extend
           \ contains=tsTypeNameHere
           \ nextgroup=tsTypeDeclTypeRegion
     syn region tsTypeDeclTypeRegion contained matchgroup=tsInterface start=/=/ end=/;/ keepend extend
