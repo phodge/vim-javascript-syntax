@@ -981,11 +981,11 @@ if b:javascript_typescript " {{{
             \ contains=@tsClTypeHere nextgroup=tsIfaceMemberTypeRegion
 
     " }}}
-    
+
     " "declare global" {{{
-    
+
       hi! link tsDeclare SpecialChar
-    
+
       syn keyword tsDeclare declare nextgroup=tsDeclareGlobalRegion skipwhite
       syn region tsDeclareGlobalRegion matchgroup=tsDeclare start=/\<global\_s*{/ end=/}/ keepend extend
             \ matchgroup=Error end="[\])]"
@@ -1005,7 +1005,7 @@ if b:javascript_typescript " {{{
     syn cluster jsClInsideClass add=tsClassMemberModifier
 
   " }}}
-  
+
   " private/public constructor args {{{
 
     syn region tsConstructorArgsRegion contained matchgroup=jsClassConstructor start=/(/ end=/)/ keepend extend
