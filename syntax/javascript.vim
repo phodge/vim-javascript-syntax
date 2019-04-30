@@ -749,6 +749,28 @@ endfor
   syn cluster jsClExpr add=jsFuncFatArrow
   hi! link jsFuncFatArrow jsAnonFunc
 
+  " this version is triggered by the 'async' keyword so we can use a much
+  " simpler start/end pattern
+  syn region jsFuncFatArrowAfterAsync contained matchgroup=jsFuncFatArrow start=/(/ end=/)/ keepend extend
+        \ contains=jsFullFuncCommaError,tsTypeFollowedByArg,jsFuncArgComma,@jsClExpr,jsComment
+        \ matchgroup=jsSyntaxError end=/[\]}]/
+        \ nextgroup=jsFuncFatArrowLonely,tsFuncFatArrowRetTypeRegion skipwhite skipnl
+
+  syn region tsFuncFatArrowRegion matchgroup=jsFuncFatArrow start=/(\ze\%()\|[$A-Za-z_][$A-Za-z_0-9]*\|{[$A-Za-z_][$A-Za-z_0-9]*\%(\_s*,\_s*[$A-Za-z_][$A-Za-z_0-9]*\)*}\):/ end=/)/
+        \ matchgroup=jsSyntaxError end=/[\]};]/
+        \ contains=jsFullFuncCommaError,tsTypeFollowedByArg,jsFuncArgComma,@jsClExpr,jsComment
+        \ keepend extend
+        \ nextgroup=jsFuncFatArrowLonely,tsFuncFatArrowRetTypeRegion skipwhite skipnl
+  syn match tsFuncFatArrowSimple /(\%([$A-Za-z_][$A-Za-z_0-9]*\)\=)\ze:/ keepend extend
+        \ contains=jsIdentifier
+        \ nextgroup=jsFuncFatArrowLonely,tsFuncFatArrowRetTypeRegion skipwhite skipnl
+  hi! link tsFuncFatArrowSimple jsFuncFatArrow
+  syn cluster jsClExpr add=tsFuncFatArrowRegion,tsFuncFatArrowSimple
+  syn region tsFuncFatArrowRetTypeRegion matchgroup=jsFuncFatArrowLonely start=/:/ end=/=>/ keepend extend
+        \ matchgroup=jsSyntaxError end=/[[\]});,]/
+        \ contains=@tsClTypeHere
+        \ nextgroup=jsAnonFuncBody,@jsClExpr skipwhite skipnl
+
   syn match jsFuncFatArrowLonely contained /=>/ nextgroup=jsAnonFuncBody,@jsClExpr skipwhite skipnl
       \ keepend extend
   hi! link jsFuncFatArrowLonely jsAnonFunc
@@ -765,7 +787,7 @@ endfor
 
   if b:javascript_es2017
     " async functions
-    syn keyword jsAsync async nextgroup=jsFuncFatArrow,jsFullFunc,jsAnonFunc skipwhite skipnl
+    syn keyword jsAsync async nextgroup=jsFuncFatArrowAfterAsync,jsFullFunc,jsAnonFunc skipwhite skipnl
     syn cluster jsClExpr add=jsAsync
     hi! link jsAsync Statement
 
@@ -977,7 +999,7 @@ if b:javascript_typescript " {{{
 
     syn region tsConstructorArgsRegion contained matchgroup=jsClassConstructor start=/(/ end=/)/ keepend extend
           \ matchgroup=Error end="[\]}]"
-          \ contains=jsFullFuncCommaError,tsTypeFollowedByArg,jsFuncArgComma,@jsClExpr,tsConstructorVisibility
+          \ contains=tsTypeFollowedByArg,tsTypeFollowedByArg,jsFuncArgComma,@jsClExpr,tsConstructorVisibility
           \ nextgroup=jsFullFuncBody skipwhite skipnl
 
     syn keyword tsConstructorVisibility contained private protected public
