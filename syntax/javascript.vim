@@ -886,10 +886,10 @@ if b:javascript_typescript " {{{
   " ": <type>" syntax {{{
 
     syn region tsTypeFollowedByValue matchgroup=tsTypeColon start=/:/ matchgroup=jsAssign end=/=/
-          \ end=/\ze;/  " use a zero-length match for ';' so that the nextgroup=@jsClExpr can't match after ';'
           \ keepend extend
           \ nextgroup=@jsClExpr skipwhite skipnl
           \ contains=@tsClTypeHere
+          \ end=/\ze;/  " use a zero-length match for ';' so that the nextgroup=@jsClExpr can't match after ';'
 
     syn region tsTypeFollowedByFullFuncBody matchgroup=tsTypeColon start=/:/ end=/\ze{\%($\|\s\)/
           \ keepend extend
