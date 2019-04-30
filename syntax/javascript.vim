@@ -869,7 +869,7 @@ if b:javascript_typescript " {{{
 
     syn region tsInterfaceArgsRegion contained matchgroup=tsTypeArgsDelim start=/</ end=/>/ keepend extend
           \ contains=tsTypeArgsComma,@tsClTypeHere
-          \ nextgroup=tsInterfaceBody skipwhite skipnl
+          \ nextgroup=tsInterfaceBody,tsInterfaceExtendsRegion skipwhite skipnl
 
     hi! link tsTypeArgsDelim tsInterface
     hi! link tsTypeArgsComma tsTypeArgsDelim
@@ -940,7 +940,13 @@ if b:javascript_typescript " {{{
       syn keyword tsInterface interface nextgroup=tsInterfaceName skipwhite skipnl
 
       syn match tsInterfaceName contained /[$A-Za-z0-9_]\+/ contains=jsUserIdentifier
-            \ nextgroup=tsInterfaceArgsRegion,tsInterfaceBody skipwhite skipnl
+            \ nextgroup=tsInterfaceArgsRegion,tsInterfaceBody,tsInterfaceExtendsRegion skipwhite skipnl
+
+      syn region tsInterfaceExtendsRegion matchgroup=tsInterface start=/\<extends\>/
+            \ end="\ze{"
+            \ contained keepend extend
+            \ nextgroup=tsInterfaceBody,tsInterfaceArgsRegion skipwhite skipnl
+            \ contains=@jsClExtendable
 
       syn region tsInterfaceBody contained matchgroup=tsInterface start=/{/ end=/}/ keepend extend
             \ contains=tsMemberReadonly,tsMemberName,jsComment,tsMemberWildcardRegion,tsCallSignatureRegion,tsFuncPrototypeRegionB
