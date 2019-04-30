@@ -891,10 +891,13 @@ if b:javascript_typescript " {{{
           \ contains=@tsClTypeHere
           \ end=/\ze;/  " use a zero-length match for ';' so that the nextgroup=@jsClExpr can't match after ';'
 
-    syn region tsTypeFollowedByFullFuncBody matchgroup=tsTypeColon start=/:/ end=/\ze{\%($\|\s\)/
+    syn region tsTypeFollowedByFullFuncBody matchgroup=tsTypeColon start=/:/ end=/\ze{\%($\|\s\)/ end=/\ze;/
           \ keepend extend
-          \ nextgroup=jsFullFuncBody skipwhite skipnl
+          \ nextgroup=jsFullFuncBody,tsNoFuncBody skipwhite skipnl
           \ contains=@tsClTypeHere
+
+    syn match tsNoFuncBody contained /;/
+    hi! link tsNoFuncBody jsFullFunc
 
     syn region tsTypeFollowedByArg matchgroup=tsTypeColon start=/:/ keepend extend
           \ matchgroup=jsFuncArgComma end=/,/ end=/\ze)/
