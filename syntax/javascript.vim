@@ -982,13 +982,20 @@ if b:javascript_typescript " {{{
 
     " }}}
 
-    " "declare global" {{{
+    " "declare global" / "declare module" {{{
 
       hi! link tsDeclare SpecialChar
 
-      syn keyword tsDeclare declare nextgroup=tsDeclareGlobalRegion skipwhite
+      syn keyword tsDeclare declare nextgroup=tsDeclareGlobalRegion,tsDeclareModuleIntro skipwhite skipnl
       syn region tsDeclareGlobalRegion matchgroup=tsDeclare start=/\<global\_s*{/ end=/}/ keepend extend
             \ matchgroup=Error end="[\])]"
+            \ contains=@jsClTop
+
+      syn region tsDeclareModuleIntro contained matchgroup=tsDeclare start=/\<module\>/ end=/\ze{/
+            \ contains=jsString
+            \ nextgroup=tsDeclareModuleRegion
+
+      syn region tsDeclareModuleRegion contained matchgroup=tsDeclare start=/{/ end=/}/
             \ contains=@jsClTop
 
       syn cluster jsClTop add=tsDeclare
