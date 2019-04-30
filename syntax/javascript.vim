@@ -847,13 +847,15 @@ if b:javascript_typescript " {{{
 
     syn match tsTypeNameHere contained /\c[$a-z_][$a-z0-9_]*/
           \ contains=jsUserIdentifier
-          \ nextgroup=tsTypeNameDot,tsTypeArgsRegion,tsTypeNameExtends skipwhite
+          \ nextgroup=tsTypeNameDot,tsTypeArgsRegion,tsTypeNameExtends,tsTypeIsList skipwhite
     syn match tsTypeNameDot contained /\./
           \ nextgroup=tsTypeNameProperty skipwhite
     syn match tsTypeNameProperty contained /\c[$a-z_][$a-z0-9_]*/
           \ nextgroup=tsTypeNameDot,tsTypeArgsRegion skipwhite
+    syn match tsTypeIsList contained /\[\]/ keepend extend
     syn keyword tsTypeNameExtends contained extends implements
     hi! link tsTypeNameExtends tsInterface
+    hi! link tsTypeIsList tsTypeNameExtends
 
     hi! link tsTypeNameDot jsDot
 
