@@ -239,7 +239,7 @@ endfor
   syn match jsGetterArgsError contained /(.\{-})/
   hi! link jsGetterArgsError jsSyntaxError
 
-  syn match jsGetterArgs contained /(\_s*)/ extend nextgroup=jsGetterBody,@jsClGetterError skipwhite skipnl
+  syn match jsGetterArgs contained /(\_s*)/ extend nextgroup=jsGetterBody,@jsClGetterError,tsTypeFollowedByFullFuncBody skipwhite skipnl
   hi! link jsGetterArgs jsGetter
   syn match jsSetterArgs contained /([$A-Za-z_][$A-Za-z0-9_]*)/
         \ nextgroup=jsGetterBody,@jsClGetterError skipwhite skipnl
