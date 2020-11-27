@@ -714,7 +714,7 @@ endfor
   syn cluster jsClExpr add=jsAnonFunc
 
   syn match jsFullFuncName contained /\<[$A-Za-z_][$A-Za-z0-9_]*\>/ contains=jsUserIdentifier
-        \ nextgroup=jsFullFuncArgs skipwhite skipnl
+        \ nextgroup=jsFullFuncArgs,tsFuncGenericRegion skipwhite skipnl
   syn match jsAnonFuncName contained /\<[$A-Za-z_][$A-Za-z0-9_]*\>/ contains=jsUserIdentifier
         \ nextgroup=jsAnonFuncArgs skipwhite skipnl
 
@@ -861,6 +861,10 @@ if b:javascript_typescript " {{{
 
     syn cluster jsClExtendable add=tsTypeNameHere
     syn cluster tsClTypeHere add=tsTypeNameHere
+
+    syn region tsFuncGenericRegion contained matchgroup=tsTypeArgsDelim start=/</ end=/>/ keepend extend
+          \ contains=tsTypeArgsComma,@tsClTypeHere
+          \ nextgroup=jsFullFuncArgs skipwhite skipnl
 
     syn region tsTypeArgsRegion contained matchgroup=tsTypeArgsDelim start=/</ end=/>/ keepend extend
           \ contains=tsTypeArgsComma,@tsClTypeHere
