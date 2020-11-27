@@ -676,8 +676,10 @@ endfor
   if b:javascript_typescript
     syn region tsClassImplementsRegion matchgroup=jsClass start=/\<implements\>/ end=/\ze{/
           \ contained keepend extend
-          \ contains=@jsClExtendable
+          \ contains=@jsClExtendable,tsImplementsComma
           \ nextgroup=jsClassBody skipwhite skipnl
+    syn match tsImplementsComma /,/ contained
+    hi! link tsImplementsComma jsClass
   endif
 
   syn region jsClassBody matchgroup=jsClass start=/{/ end=/}/ contained
