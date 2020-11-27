@@ -657,7 +657,7 @@ endfor
 
 " {{{ classes
 
-  syn match jsClassIntro /\<class\_s\+\w\+\>/ nextgroup=jsClassBody,jsClassExtendsRegion,tsClassImplementsRegion,tsTypeArgsRegion skipwhite skipnl
+  syn match jsClassIntro /\<class\_s\+\%(\%(extends\)\@!\w\+\>\)\=/ nextgroup=jsClassBody,jsClassExtendsRegion,tsClassImplementsRegion,tsTypeArgsRegion skipwhite skipnl
         \ contains=jsClass,jsUserIdentifier
   syn keyword jsClass contained class
   hi! link jsClass Typedef
