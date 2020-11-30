@@ -1132,11 +1132,11 @@ if b:javascript_jsx " {{{
     " attributes, opening tag name, tag self-close, jsx property splatting, and the 'inner tag'
     syn cluster jsClExpr add=jsxTagOuter
     syn cluster jsxClAttrExpr add=jsxTagOuter
-    syn region jsxTagOuter matchgroup=jsxLTGT start=!<\z(\h\w*\%(\.\w\+\)*\)\@=! keepend extend
+    syn region jsxTagOuter matchgroup=jsxLTGT start=!<\z(\h\w*\%(\.\w\+\)*\)\@=! contained keepend extend
           \ matchgroup=jsxTagSelfClose end=!/\ze\z1>! end=!/>\@=!
           \ nextgroup=jsxTagGoodClosing
           \ contains=jsxTagInner,jsxTagOuterName,jsxTagUnexpectedCloseTag,jsxTagOpenError,jsxTagUnknown,@jsxClAttr
-    syn region jsxTagOuter matchgroup=jsxLTGT start=!<>! end=!</>! keepend extend
+    syn region jsxTagOuter matchgroup=jsxLTGT start=!<>! end=!</>! contained keepend extend
           \ contains=jsxTagOuter,@jsxClInlineExpr
     syn match jsxTagGoodClosing contained !\w\+\%(\.\w\+\)*>! contains=jsxPossibleIdentifier
     syn match jsxTagGoodClosing contained !>!
