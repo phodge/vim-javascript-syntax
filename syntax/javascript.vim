@@ -541,12 +541,14 @@ endfor
         \ contains=@jsClTop,@jsClImportExport
         \ nextgroup=jsCatchStatement,jsFinallyStatement skipwhite skipnl
 
-  syn region jsCatchStatement contained matchgroup=jsTry start=/\<catch\_s*(/ end=/)/ keepend extend
+  syn keyword jsCatchStatement contained catch nextgroup=jsCatchArgs,jsCatchBlock skipwhite skipnl
+  syn keyword jsFinallyStatement contained finally nextgroup=jsFinallyBlock skipwhite skipnl
+  hi! link jsCatchStatement jsTry
+  hi! link jsFinallyStatement jsTry
+
+  syn region jsCatchArgs contained matchgroup=jsTry start=/(/ end=/)/ keepend extend
         \ contains=jsErrorCloseBrace,jsErrorSemicolon,jsErrorComma,jsErrorAssign
         \ nextgroup=jsCatchBlock skipwhite skipnl
-
-  syn keyword jsFinallyStatement contained finally nextgroup=jsFinallyBlock skipwhite skipnl
-  hi! link jsFinallyStatement jsTry
 
   syn region jsCatchBlock contained matchgroup=jsTry start=/{/ end=/}/ keepend extend
         \ contains=@jsClTop,@jsClImportExport
