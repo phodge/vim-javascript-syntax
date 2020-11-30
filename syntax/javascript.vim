@@ -194,7 +194,7 @@ endfor
 " {{{ expressions - normal dictionaries (first so they have lowest priority)
 
   syn region jsDictRegion matchgroup=jsDict start=/{/ end=/}/
-        \ keepend extend contains=jsDictKey,jsDictKeySpecial,jsDictInlineFunc,jsDictComma,jsComment,jsErrorSemicolon,jsComment,jsGetter
+        \ keepend extend contains=jsDictKey,jsDictKeySpecial,jsDictInlineFunc,jsDictComma,jsComment,jsErrorSemicolon,jsComment,jsGetter,jsDictSplat
   syn cluster jsClExpr add=jsDictRegion
   syn cluster jsClTop add=jsDictRegion
   hi! link jsDict Number
@@ -218,6 +218,9 @@ endfor
 
   syn match jsDictComma contained /,/
   hi! link jsDictComma jsDict
+
+  syn match jsDictSplat contained /\.\.\./ keepend extend nextgroup=@jsClExpr
+  hi! link jsDictSplat jsDict
 
   " ES5 getters/setters inside objects
   syn cluster jsClGetterError add=jsErrorCloseBrace,jsErrorComma,jsErrorAssign,jsErrorCloseSquare,jsErrorCloseParen
@@ -330,7 +333,7 @@ endfor
   syn region jsListAssignRegion matchgroup=jsVar start=/\[/ end=/\]/ keepend extend
         \ nextgroup=jsAssign skipwhite skipnl
         \ contains=jsVarComma,jsSplat,jsIdentifier
-  syn match jsSplat contained /\.\.\./
+  syn match jsSplat contained /\.\.\./ nextgroup=@jsClExpr
   syn cluster jsClTop add=jsListAssignRegion
   hi! link jsSplat jsVar
 
