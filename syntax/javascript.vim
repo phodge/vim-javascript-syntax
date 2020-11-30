@@ -311,7 +311,7 @@ endfor
 
 " {{{ ternary operator
 
-  syn region jsTernaryOperator matchgroup=Operator contained start=/?/ end=/:/ keepend extend
+  syn region jsTernaryOperator matchgroup=Operator contained start=/?\.\@!/ end=/:/ keepend extend
         \ contains=@jsClExpr,jsErrorSemicolon,jsErrorCloseBrace
         \ nextgroup=@jsClExpr skipwhite skipnl
   syn cluster jsClAfterValue add=jsTernaryOperator
@@ -363,7 +363,9 @@ endfor
   syn cluster jsClExpr add=jsSpecialIdentifier
   syn cluster jsClTop add=jsSpecialIdentifier
 
-  syn region jsCall contained matchgroup=jsParens start=/(/ end=/)/ keepend extend
+  " TODO: should optional chaining syntax "?.()" be controlled by feature
+  " flags?
+  syn region jsCall contained matchgroup=jsParens start=/(/ start=/?\.(/ end=/)/ keepend extend
         \ contains=@jsClExpr,jsErrorCloseBrace,jsErrorCloseSquare,jsErrorSemicolon,jsComment
         \ nextgroup=@jsClAfterValue skipwhite skipnl
   syn region jsPropAccess contained matchgroup=jsParens start=/\[/ end=/\]/ keepend extend
@@ -403,7 +405,7 @@ endfor
 
 " {{{ operators
 
-  syn match jsDot /\./ contained nextgroup=jsPropertyName,jsMethodName skipwhite skipnl
+  syn match jsDot /\.\|?\./ contained nextgroup=jsPropertyName,jsMethodName skipwhite skipnl
   hi! link jsDot Operator
   syn cluster jsClAfterValue add=jsDot
 
