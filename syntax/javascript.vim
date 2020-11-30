@@ -1136,6 +1136,8 @@ if b:javascript_jsx " {{{
           \ matchgroup=jsxTagSelfClose end=!/\ze\z1>! end=!/>\@=!
           \ nextgroup=jsxTagGoodClosing
           \ contains=jsxTagInner,jsxTagOuterName,jsxTagUnexpectedCloseTag,jsxTagOpenError,jsxTagUnknown,@jsxClAttr
+    syn region jsxTagOuter matchgroup=jsxLTGT start=!<>! end=!</>! keepend extend
+          \ contains=jsxTagOuter,@jsxClInlineExpr
     syn match jsxTagGoodClosing contained !\w\+\%(\.\w\+\)*>! contains=jsxPossibleIdentifier
     syn match jsxTagGoodClosing contained !>!
     hi! link jsxTagGoodClosing jsxLTGT
