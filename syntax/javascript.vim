@@ -905,7 +905,18 @@ if b:javascript_typescript " {{{
 
     syn match tsTypeUnion contained /[|&]/ nextgroup=@tsClTypeHere skipwhite skipnl keepend extend
     hi! link tsTypeUnion Macro
-    syn cluster tsClTypeHere add=tsTypeUnion
+
+    " XXX: it is particularly difficult to get {...} interfaces highlighting
+    " correctly if they are after a '|' union operator in a function return
+    " type, because the function syntax elements are looking for a {...} as
+    " the function body. We hack around this by making a '& {...}' region
+    syn match tsInterfaceAfterUnion contained /[&|]\_s*{\_.\{-}}/ extend
+          \ contains=tsInterfaceBody
+    hi! link tsInterfaceAfterUnion tsTypeUnion
+
+    syn cluster tsClTypeHere add=tsTypeUnion,tsInterfaceAfterUnion
+
+    syn cluster tsClAfterType add=tsTypeUnion,tsInterfaceAfterUnion
 
   " }}}
 
