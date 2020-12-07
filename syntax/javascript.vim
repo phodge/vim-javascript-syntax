@@ -689,7 +689,7 @@ endfor
     hi! link tsImplementsComma jsClass
   endif
 
-  syn region jsClassBody matchgroup=jsClass start=/{/ end=/}/ contained
+  syn region jsClassBody matchgroup=jsClass start=/{/ end=/}/ contained keepend extend
         \ contains=jsClassConstructor,jsClassMethod,jsMethodGenerator,jsClassStatic,jsComment,@jsClInsideClass
 
   if b:javascript_es6
