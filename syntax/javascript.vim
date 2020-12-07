@@ -379,7 +379,7 @@ endfor
   syn cluster jsClAfterValue add=jsCall,jsPropAccess
 
   " parenthesized regions
-  syn region jsParenExpr matchgroup=jsParens start=/(/ end=/)/ keepend extend contains=@jsClExpr
+  syn region jsParenExpr matchgroup=jsParens start=/(/ end=/)/ keepend extend contains=@jsClExpr,jsComment
         \ nextgroup=@jsClAfterValue skipwhite skipnl
         \ matchgroup=Error end=/[;]/
   syn cluster jsClExpr add=jsParenExpr
