@@ -824,6 +824,20 @@ endfor
 
 if b:javascript_typescript " {{{
 
+  " "as", "keyof" etc {{{
+
+    syn keyword tsTypecast contained as nextgroup=@tsClTypeHere skipwhite skipnl
+    hi! link tsTypecast Comment
+
+    syn keyword tsKeyof contained keyof nextgroup=@tsClTypeHere skipwhite skipnl
+    syn match tsKeyof contained /\<in\s\+keyof\>/ keepend extend nextgroup=@tsClTypeHere skipwhite skipnl
+    hi! link tsKeyof Identifier
+
+    syn cluster tsClTypeHere add=tsKeyof
+    syn cluster jsClAfterValue add=tsTypecast
+
+  " }}}
+
   " simple types {{{
 
     syn keyword tsSimpleType contained string number boolean true false null undefined this
@@ -1014,7 +1028,7 @@ if b:javascript_typescript " {{{
             \ keepend extend
             \ contains=@tsClTypeHere
 
-      syn region tsMemberWildcardRegion contained matchgroup=tsMemberModifier start=/\[\s*\w\+:/ end=/\]\ze:/
+      syn region tsMemberWildcardRegion contained matchgroup=tsMemberModifier start=/\[\s*\w\+\(:\|\_s\+in\>\)/ end=/\]\ze:/
             \ contains=@tsClTypeHere nextgroup=tsIfaceMemberTypeRegion
 
     " }}}
