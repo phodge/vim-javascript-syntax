@@ -839,6 +839,19 @@ if b:javascript_typescript " {{{
 
   " }}}
 
+  " tuples & ternaries {{{
+
+    syn region tsTupleRegion contained matchgroup=tsTupleEnds start=/\[/ end=/\]/ keepend extend contains=@tsClTypeHere
+    hi! link tsTupleEnds tsSimpleType
+
+    syn region tsTernaryRegion contained matchgroup=tsTernaryOperators start=/?/ end=/:/ keepend extend contains=@tsClTypeHere
+    hi! link tsTernaryOperators tsSimpleType
+
+    syn cluster tsClTypeHere add=tsTupleRegion
+    syn cluster tsClTypeHere add=tsTernaryRegion
+
+  " }}}
+
   " simple type declarations using "type" statement {{{
 
     syn region tsTypeDecl matchgroup=tsInterface start=/\<type\>/ end=/\ze=/ keepend extend
