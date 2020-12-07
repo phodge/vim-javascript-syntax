@@ -753,8 +753,10 @@ endfor
   syn match jsAnonFuncArgComma /,/ contained
   hi! link jsAnonFuncArgComma jsAnonFunc
 
-  syn match jsFuncFatArrow /\%(\<[$A-Za-z_][$A-Za-z_0-9]*\|(\%([$A-Za-z_][$A-Za-z_0-9]*\|\[\w\+\_s*\%(,\_s*\w\+\_s*\)*\]\)\_s*\%(,\_s*[$A-Za-z_][$A-Za-z_0-9]*\)*)\|()\)\_s*=>/ contains=jsAnonFuncArgComma extend
-        \ nextgroup=jsAnonFuncBody skipwhite skipnl
+  syn match jsFuncFatArrow /\<[$A-Za-z_][$A-Za-z_0-9]*\_s*=>/ extend nextgroup=jsAnonFuncBody,@jsClExpr skipwhite skipnl
+  syn match jsFuncFatArrow /(\_s*)\_s*=>/ extend nextgroup=@jsClExpr,jsAnonFuncBody skipwhite skipnl
+  " XXX: I'm not sure what this match offered over the tsFuncFatArrowRegion below
+  "syn match jsFuncFatArrow /(\_s*\%([$A-Za-z_][$A-Za-z_0-9]*\_s*\%([:,]\|=\_s*\w\)\|\[\w\+\_s*[,]]\|{\w\+\_s*[,}]\)\_.\{-}=>/ contains=jsAnonFuncArgComma extend nextgroup=jsAnonFuncBody skipwhite skipnl
   syn cluster jsClExpr add=jsFuncFatArrow
   hi! link jsFuncFatArrow jsAnonFunc
 
@@ -765,7 +767,7 @@ endfor
         \ matchgroup=jsSyntaxError end=/[\]}]/
         \ nextgroup=jsFuncFatArrowLonely,tsFuncFatArrowRetTypeRegion skipwhite skipnl
 
-  syn region tsFuncFatArrowRegion matchgroup=jsFuncFatArrow start=/(\ze\%()\|[$A-Za-z_][$A-Za-z_0-9]*\|{[$A-Za-z_][$A-Za-z_0-9]*\%(\_s*,\_s*[$A-Za-z_][$A-Za-z_0-9]*\)*}\):/ end=/)/
+  syn region tsFuncFatArrowRegion matchgroup=jsFuncFatArrow start=/(\ze\_s*\%()\|[$A-Za-z_][$A-Za-z_0-9]*\|{[$A-Za-z_][$A-Za-z_0-9]*\%(\_s*,\_s*[$A-Za-z_][$A-Za-z_0-9]*\)*}\):/ end=/)/
         \ matchgroup=jsSyntaxError end=/[\]};]/
         \ contains=jsFullFuncCommaError,tsTypeFollowedByArg,jsFuncArgComma,@jsClExpr,jsComment
         \ keepend extend
