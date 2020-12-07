@@ -903,7 +903,7 @@ if b:javascript_typescript " {{{
     syn keyword tsTypeComplex contained Array ReadonlyArray
     hi! link tsTypeComplex tsSimpleType
 
-    syn match tsTypeUnion contained /|/
+    syn match tsTypeUnion contained /[|&]/ nextgroup=@tsClTypeHere skipwhite skipnl keepend extend
     hi! link tsTypeUnion Macro
     syn cluster tsClTypeHere add=tsTypeUnion
 
