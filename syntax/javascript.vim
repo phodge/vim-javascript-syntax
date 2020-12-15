@@ -938,13 +938,13 @@ if b:javascript_typescript " {{{
 
   " ": <type>" syntax {{{
 
-    syn region tsTypeFollowedByValue matchgroup=tsTypeColon start=/:/ matchgroup=jsAssign end=/=/
+    syn region tsTypeFollowedByValue matchgroup=tsTypeColon1 start=/:/ matchgroup=jsAssign end=/=/
           \ keepend extend
           \ nextgroup=@jsClExpr skipwhite skipnl
           \ contains=@tsClTypeHere
           \ end=/\ze;/  " use a zero-length match for ';' so that the nextgroup=@jsClExpr can't match after ';'
 
-    syn region tsTypeFollowedByFullFuncBody matchgroup=tsTypeColon start=/:/ end=/\ze{\%($\|\s\)/ end=/\ze;/
+    syn region tsTypeFollowedByFullFuncBody matchgroup=tsTypeColon2 start=/:/ end=/\ze{\%($\|\s\)/ end=/\ze;/
           \ keepend extend
           \ nextgroup=jsFullFuncBody,tsNoFuncBody skipwhite skipnl
           \ contains=@tsClTypeHere
@@ -952,12 +952,14 @@ if b:javascript_typescript " {{{
     syn match tsNoFuncBody contained /;/
     hi! link tsNoFuncBody jsFullFunc
 
-    syn region tsTypeFollowedByArg matchgroup=tsTypeColon start=/:/ keepend extend
+    syn region tsTypeFollowedByArg matchgroup=tsTypeColon3 start=/:/ keepend extend
           \ matchgroup=jsFuncArgComma end=/,/ end=/\ze)/
           \ matchgroup=jsAssign end=/=>\@!/
           \ contains=@tsClTypeHere
 
-    hi! link tsTypeColon Function
+    hi! link tsTypeColon1 Function
+    hi! link tsTypeColon2 Function
+    hi! link tsTypeColon3 Function
 
   " }}}
 
