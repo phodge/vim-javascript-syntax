@@ -738,8 +738,9 @@ endfor
         \ nextgroup=jsAnonFuncArgs skipwhite skipnl
 
   " full/anonymous function arg list
+  " XXX: I'm not sure why we had @jsClExpr in the contains= of this one
   syn region jsFullFuncArgs contained matchgroup=jsFullFunc start=/(/ end=/)/ contained
-        \ keepend extend contains=jsFullFuncCommaError,tsTypeFollowedByArg,jsFuncArgComma,@jsClExpr,jsComment
+        \ keepend extend contains=jsFullFuncCommaError,tsTypeFollowedByArg,jsFuncArgComma,jsComment
         \ nextgroup=jsFullFuncBody,tsTypeFollowedByFullFuncBody skipwhite skipnl
   syn match jsFuncArgComma contained /,/
   hi! link jsFuncArgComma jsFullFunc
@@ -955,7 +956,7 @@ if b:javascript_typescript " {{{
           \ end=/\ze;/  " use a zero-length match for ';' so that the nextgroup=@jsClExpr can't match after ';'
 
     syn region tsTypeFollowedByFullFuncBody matchgroup=tsTypeColon2 start=/:/ end=/\ze{\%($\|\s\)/ end=/\ze;/
-          \ keepend extend
+          \ contained keepend extend
           \ nextgroup=jsFullFuncBody,tsNoFuncBody skipwhite skipnl
           \ contains=@tsClTypeHere
 
