@@ -298,12 +298,22 @@ endfor
 
 " {{{ expressions - unary operators
 
-  syn keyword jsOperator new typeof delete void nextgroup=@jsClExpr skipwhite skipnl
+  syn keyword jsOperator typeof delete void nextgroup=@jsClExpr skipwhite skipnl
   syn match jsOperator /[!~]/ nextgroup=@jsClExpr skipwhite skipnl
   syn match jsOperator /\%(++\=\|--\=\)/ nextgroup=@jsClExpr skipwhite skipnl
   syn cluster jsClExpr add=jsOperator
   syn cluster jsClTop add=jsOperator
   hi! link jsOperator SpecialChar
+
+  if ! b:javascript_typescript " {{{
+    syn keyword jsOperator new nextgroup=@jsClExpr skipwhite skipnl
+  else
+    syn keyword jsOperator new nextgroup=tsNewSomething skipwhite skipnl
+
+    syn match tsNewSomething contained /[$A-Za-z0-9_]\+\%(\.[$A-Za-z0-9_]\+\)*/ 
+          \ contains=jsUserIdentifier,jsDot
+          \ nextgroup=tsGenericArgs skipwhite skipnl
+  endif " }}}
 
   syn match jsPostIncrement contained /\%(++\|--\)/ nextgroup=@jsClExpr skipwhite skipnl
   syn cluster jsClAfterValue add=jsPostIncrement
