@@ -430,7 +430,7 @@ endfor
 
   syn match jsLogicalOperator /\%(&&\|||\|??\|[*&^|]=\@!\|+[+=]\@!\|-[-=]\@!\|\/[*/]\@!\)/ contained
         \ nextgroup=@jsClExpr skipwhite skipnl
-  syn match jsComparisonOperator /\%([!=]==\=\|[<>]=\=\)/ contained
+  syn match jsComparisonOperator /[!=]==\=\|[<>]=\=/ contained
         \ nextgroup=@jsClExpr skipwhite skipnl
   syn keyword jsComparisonOperator contained instanceof nextgroup=@jsClExpr skipwhite skipnl
   syn cluster jsClAfterValue add=jsLogicalOperator,jsComparisonOperator
