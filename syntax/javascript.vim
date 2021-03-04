@@ -702,7 +702,7 @@ endfor
   hi! link jsClassConstructor jsClass
 
   syn keyword jsClassStatic contained static nextgroup=jsClassProperty skipwhite skipnl
-  syn region jsClassProperty contained start=/\<[$A-Za-z_][$A-Za-z0-9_]*\ze\_s*[:=]/ keepend extend matchgroup=jsClass end=/;/
+  syn region jsClassProperty contained start=/\<[$A-Za-z_][$A-Za-z0-9_]*\ze\_s*\%(?\=:\|=\)/ keepend extend matchgroup=jsClass end=/;/
         \ contains=jsAssign,tsClassMemberTypeRegion
   hi! link jsClassStatic jsClass
 
