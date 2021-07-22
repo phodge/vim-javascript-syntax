@@ -325,7 +325,7 @@ endfor
 " {{{ ternary operator
 
   syn region jsTernaryOperator matchgroup=Operator contained start=/?\.\@!/ end=/:/ keepend extend
-        \ contains=@jsClExpr,jsErrorSemicolon,jsErrorCloseBrace
+        \ contains=@jsClExpr,jsErrorSemicolon,jsErrorCloseBrace,jsComment
         \ nextgroup=@jsClExpr skipwhite skipnl
   syn cluster jsClAfterValue add=jsTernaryOperator
 
