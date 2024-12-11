@@ -625,7 +625,7 @@ endfor
         \ keepend extend contains=@jsClExpr,jsVarComma
 
   syn keyword jsExportDefault contained default
-        \ nextgroup=jsFullFunc,jsClassIntro skipwhite skipnl
+        \ nextgroup=jsFullFunc,jsClassIntro,jsListRegion skipwhite skipnl
 
   syn match jsExportStar /\*/ contained nextgroup=jsExportFromRegion skipwhite skipnl
 
